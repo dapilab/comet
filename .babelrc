@@ -1,0 +1,14 @@
+{
+  "presets": [["es2015", {"modules": false}], "stage-0", "react"],
+  "plugins": [
+    "transform-runtime",
+    "syntax-async-functions",
+    "transform-regenerator",
+    "transform-decorators-legacy"
+  ],
+  "env": {
+    "development": {
+      "plugins": ["react-hot-loader/babel"]
+    }
+  }
+}

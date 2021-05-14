@@ -1,0 +1,19 @@
+%icon {
+  font-family: 'icon';
+  font-variant: normal;
+  font-weight: normal;
+  speak: none;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+%clearfix {
+  &:after {
+    content: '';
+    display: table;
+    visibility: hidden;
+    clear: both;
+    height: 1px;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,88 @@
+// Transition
+.transition-20 {
+  transition: all 0.20s ease-out;
+}
+.transition-35 {
+  transition: all 0.35s ease-out;
+}
+
+// Z-index
+.z-10 {
+  z-index: 10
+}
+.z-20 {
+  z-index: 20
+}
+.z-30 {
+  z-index: 30
+}
+.z-40 {
+  z-index: 40
+}
+.z-50 {
+  z-index: 50
+}
+
+.z-99 {
+  z-index: 99
+}
+
+// Shadow
+.grey-shadow {
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+// Flex
+.flex-2 {
+  flex: 2 0 0;
+}
+
+// Margin
+.mt-05 {
+  margin-top: 0.15rem;
+}
+
+// Line height
+.leading-18 {
+  line-height: 1.8
+}
+
+// Border radius
+.rounded-md {
+  border-radius: 0.225rem;
+}
+.rounded-tl-md {
+  border-top-left-radius: 0.225rem;
+}
+.rounded-bl-md {
+  border-bottom-left-radius: 0.225rem;
+}
+.rounded-tr-md {
+  border-top-right-radius: 0.225rem;
+}
+.rounded-br-md {
+  border-bottom-right-radius: 0.225rem;
+}
+
+// Min height
+.min-h-1 {
+  min-height: 1rem;
+}
+
+// Min width
+.min-w-1 {
+  min-width: 1rem;
+}
+
+// Font family
+.font-sf {
+  font-family: "sfrounded"
+}
+
+// Padding
+.py-15 {
+  padding-top: 0.38rem;
+  padding-bottom: 0.38rem;
+}
+
+
