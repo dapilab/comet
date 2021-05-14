@@ -1,0 +1,25 @@
+@import "~shared-style/mixin";
+
+.SubMenu {
+  &.childShow {
+    i {
+      opacity: 100% !important;
+    }
+  }
+  & > .opts {
+    @extend %fadeUpHide;
+    background: #fff;
+    top: 100%;
+    &.active {
+      @extend %fadeUpShow;
+    }
+  }
+}
+
+.darkTheme {
+  .SubMenu {
+    & > .opts {
+      background: #222;
+    }
+  }
+}

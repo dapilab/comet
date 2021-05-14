@@ -1,0 +1,110 @@
+@import "./variable";
+@import "./mixin";
+
+// Button
+.btn {
+  text-align: center;
+  transition: opacity 0.35s ease-out;
+  cursor: pointer;
+  line-height: 1;
+  border-radius: 5px;
+  &:hover {
+    opacity: 0.85;
+  }
+  &.rounded-lg {
+    border-radius: 1rem;
+  }
+  &.primary {
+    background: $blue-purple;
+    background: linear-gradient(90deg, #8990FF, $blue-purple);
+    color: #fff;
+    &.shadow {
+      box-shadow: 0 2px 6px #8990FF;
+    }
+  }
+  &.secondary {
+    background: transparentize($blue-purple, 0.9);
+    color: $blue-purple;
+  }
+  &.secondary-transparent {
+    background: transparent;
+    color: $blue-purple;
+  }
+  &.secondary-border {
+    background: transparent;
+    color: $blue-purple;
+    border: 1px solid $blue-purple;
+  }
+  &.remove {
+    background: lighten($red, 28%);
+    color: $red;
+    transition: background 0.35s ease-out;
+    &:hover {
+      opacity: 1;
+      background: lighten($red, 28%);
+    }
+    &.translucent {
+      background: transparentize($red, 0.9);
+      &:hover {
+        opacity: 1;
+        background: transparentize($red, 0.8);
+      }
+    }
+    &.dark {
+      background: $red;
+      color: #fff;
+      &:hover {
+        opacity: 0.85;
+      }
+    }
+  }
+  &.info {
+    background: lighten($blue-purple, 32%);
+    color: $blue-purple;
+    transition: background 0.35s ease-out;
+    &:hover {
+      opacity: 1;
+      background: lighten($blue-purple, 28%);
+    }
+    &.translucent {
+      background: transparentize($blue-purple, 0.9);
+      &:hover {
+        opacity: 1;
+        background: transparentize($blue-purple, 0.8);
+      }
+    }
+  }
+}
+.darkTheme {
+  .btn {
+    &.secondary {
+      background: transparent;
+      color: $blue-purple;
+    }
+  }
+}
+
+// Box shadow
+.boxShadow {
+  border-radius: 8px;
+  box-shadow: 0px 10px 50px rgba(0,0,0,0.1);
+  background: #fff;
+}
+
+// Input
+.input {
+  border: none;
+  caret-color: $blue-purple;
+  min-width: 24px;
+  padding: 0.2rem 0;
+  background: transparent;
+  &.bottomBorder {
+    border-bottom: 1px solid $grey-lighter;
+  }
+  &.bottomBorderLightest {
+    border-bottom: 1px solid $grey-lightest;
+  }
+}
+input::placeholder {
+  color: $grey-light;
+}

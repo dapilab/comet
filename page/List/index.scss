@@ -1,0 +1,39 @@
+@import "shared-style/variable";
+
+.List {
+  flex: 0 0 16rem;
+  margin-right: 2.5rem;
+  &:hover {
+    .listHoverShow {
+      opacity: 1;
+    }
+  }
+
+  .apiHeader {
+    margin-bottom: 0.5rem;
+    &:hover {
+      .headerHoverShow {
+        opacity: 1;
+      }
+    }
+  }
+
+  .componentItem {
+    cursor: pointer;
+    transition: all 0.25s ease-out;
+    &.active, &:hover {
+      color: $blue-purple;
+    }
+  }
+}
+
+.darkTheme {
+  .componentItem {
+    &.active, &:hover {
+      color: #fff;
+    }
+    &.active {
+      font-weight: bold;
+    }
+  }
+}

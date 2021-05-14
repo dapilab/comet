@@ -25,10 +25,54 @@
   transform: translateY(15px);
   pointer-events: none;
 }
+.fadeUpHide {
+  @extend %fadeUpHide;
+}
 %fadeUpShow {
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+.fadeUpShow {
+  @extend %fadeUpShow;
+}
+
+%fadeRightHide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(8px);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+.fadeRightHide {
+  @extend %fadeRightHide;
+}
+%fadeRightShow {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+.fadeRightShow {
+  @extend %fadeRightShow;
+}
+
+%fadeLeftHide {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-8px);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+.fadeLeftHide {
+  @extend %fadeLeftHide;
+}
+%fadeLeftShow {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+  transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+}
+.fadeLeftShow {
+  @extend %fadeLeftShow;
 }
 
 %opacityHide {
@@ -36,7 +80,32 @@
   opacity: 0;
   pointer-events: none;
 }
+.opacityHide {
+  @extend %opacityHide;
+}
 %opacityShow {
   opacity: 1;
   pointer-events: auto;
+}
+.opacityShow {
+  @extend %opacityShow;
+}
+
+/**
+ * animation
+ */
+@keyframes showUpFromLeftToRight {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+.showUpFromLeftToRight {
+  opacity: 0;
+  transform: translateX(-10px);
+  animation: 0.25s ease-out 0.15s showUpFromLeftToRight forwards;
 }

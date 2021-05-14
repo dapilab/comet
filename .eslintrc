@@ -3,7 +3,8 @@
   "parser": "babel-eslint",
   "env": {
     "browser": true,
-    "jest": true
+    "jest": true,
+    "jquery": true
   },
   "settings": {
     "import/resolver": {
@@ -26,7 +27,7 @@
     "comma-dangle": ["error", "never"],
     "object-curly-spacing": ["error", "always"],
     "consistent-this": ["error", "self"],
-    "max-len": ["error", {"code": 120, "ignoreUrls": true}],
+    "max-len": ["error", {"code": 210, "ignoreUrls": true}],
     "camelcase": "off",
     "no-unused-expressions": "off",
     "one-var": ["error", "never"],
@@ -54,16 +55,27 @@
     "lines-between-class-members": "off",
     "react/button-has-type": "off",
     "no-mixed-operators": "off",
+    "no-useless-escape": "off",
     "no-underscore-dangle": "off",
     "object-curly-newline": 0,
+    "no-return-await": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/jsx-closing-bracket-location": "off",
     "operator-linebreak": "off",
     "react/jsx-wrap-multilines": "off",
     "react/jsx-curly-newline": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/destructuring-assignment": "off",
+    "no-nested-ternary": "off",
+    "react/prefer-stateless-function": "off",
     "func-names": "off",
     "import/order": "off",
     "array-callback-return": "off",
-    "default-case": "off"
+    "default-case": "off",
+    "jsx-a11y/mouse-events-have-key-events": "off",
+    "no-use-before-define": "off",
+    "react/no-unescaped-entities": "off",
+    "react/no-danger": "off",
+    "prefer-destructuring": "off"
   }
 }

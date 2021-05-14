@@ -1,0 +1,84 @@
+// Color
+$black: #222;
+$black-lighter: #6e6d7a;
+.black { color: $black }
+.black-lighter { color: $black-lighter }
+
+$green: #77B87E;
+.green { color: $green }
+.hover\:green:hover { color: $green }
+.green-bg { background: $green }
+.green-light { color: lighten($green, 18%); }
+
+$grey-light: #8792a2;
+$grey-lighter: #BCBCBC;
+$grey-lightest: #F1F1F1;
+$grey: #4f566b;
+$grey-dark: #555;
+$grey-darker: #354a57;
+$grey-opacify: rgba(13,12,34,0.02);
+$grey-blue: #8792A2;
+.grey-light { color: $grey-light }
+.grey-light-bg { background: $grey-light }
+.grey-lighter { color: $grey-lighter }
+.grey-lighter-bg { background: $grey-lighter }
+.grey-lightest { color: $grey-lightest }
+.grey-lightest-bg { background: $grey-lightest }
+.grey { color: $grey }
+.grey-bg { background: $grey }
+.grey-dark { color: $grey-dark }
+.hover\:grey-dark:hover { color: $grey-dark }
+.grey-dark-bg { background: $grey-dark }
+.grey-darker { color: $grey-darker }
+.grey-blue { color: $grey-blue; }
+
+$orange: #F09541;
+.orange { color: $orange }
+.hover\:orange:hover { color: $orange }
+.orange-bg {
+  background: $orange;
+  &.shadow {
+    box-shadow: 0 2px 5px rgba(240, 149, 65, 0.8);
+  }
+}
+
+$red: #EE726D;
+.red { color: $red }
+.red-bg { background: $red }
+.hover\:red:hover { color: $red }
+.hover\:red-bg-light:hover { background: lighten($red, 30%) }
+
+$blue-light: #F8FAFF;
+$blue: #3D9FE9;
+$blue-dark: #3E396B;
+$blue-purple: #568ef2;
+.blue-light { color: $blue-light }
+.blue { color: $blue }
+.blue-dark { color: $blue-dark }
+.blue-purple { color: $blue-purple }
+.hover\:blue-purple:hover { color: $blue-purple }
+.blue-purple-bg { background: $blue-purple }
+.hover\:blue-purple-bg-light:hover { background: lighten($blue-purple, 32%) }
+
+$purple: #7A24E8;
+.purple { color: $purple }
+
+// Request method
+$getBlue: #568ef2;
+$postOrange: #F09541;
+$patchGreen: #77B87E;
+$delRed: #EE726D;
+$headPurple: #7A24E8;
+.getBlue { color: $getBlue };
+.postOrange { color: $postOrange };
+.putGreen { color: $patchGreen };
+.patchGreen { color: $patchGreen };
+.delRed { color: $delRed };
+.headPurple { color: $headPurple };
+
+.darkTheme {
+  .grey { color: #B8B8B8 }
+  .grey-light { color: #848484 }
+  .purple { color: #9AAAFF;  }
+}
+

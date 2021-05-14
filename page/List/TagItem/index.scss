@@ -1,0 +1,41 @@
+@import "shared-style/variable";
+
+.TagItem {
+  & > .tagHeader {
+    &:hover {
+      .iconadd {
+        opacity: 1;
+      }
+      .headerHoverShow {
+      opacity: 1;
+    }
+    }
+    .openHandler {
+      &.close {
+        transform: rotate(180deg);
+      }
+    }
+  }
+
+  .endpointItem {
+    transition: all 0.2s ease-out;
+    cursor: pointer;
+    border-radius: 10px;
+    &:hover, &.active {
+      color: $blue-purple;
+    }
+  }
+}
+
+.darkTheme {
+  .TagItem {
+    .endpointItem {
+      &:hover, &.active {
+        color: #fff;
+      }
+      &.active {
+        font-weight: bold;
+      }
+    }
+  }
+}

@@ -16,7 +16,7 @@ module.exports = merge(baseConfig, {
   output: {
     filename: "[name].[chunkHash].js",
     path: path.resolve(__dirname, "../dist"),
-    publicPath: "/app/"
+    publicPath: "/"
   },
   plugins: [
     // new BundleAnalyzerPlugin(),

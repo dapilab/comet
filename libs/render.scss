@@ -1,0 +1,41 @@
+@import "~shared-style/variable";
+
+.attrHideIcon {
+  display: none;
+}
+
+.showHideIconWhenHover {
+  .attrHideIcon {
+    display: block;
+    opacity: 0;
+    transition: color 0.2s ease-out;
+  }
+  .attrHideIcon.iconhide {
+    opacity: 1;
+  }
+
+  .ModelRender {
+    &.isHidden {
+      color: $grey-lighter;
+      p, span {
+        color: $grey-lighter !important;
+      }
+    }
+
+    &:hover {
+      .attrHideIcon.iconbrowse {
+        opacity: 1;
+      }
+    }
+  }
+}
+
+.darkTheme {
+  .attributeName {
+    color: #fff;
+  }
+
+  .exampleKey {
+    color: #fff;
+  }
+}

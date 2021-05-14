@@ -1,0 +1,16 @@
+@import "~shared-style/variable";
+
+.Detail {
+  .attributeBorderBottom:not(:last-of-type) {
+    border-bottom: 1px solid $grey-lightest;
+    margin-bottom: 0.5rem;
+  }
+}
+
+.darkTheme {
+  .Detail {
+    .attributeBorderBottom:not(:last-of-type) {
+      border-bottom: 1px solid #4E4C4C;
+    }
+  }
+}

@@ -2,18 +2,18 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
-@import "./font";
 @import './components';
 @import './variable';
+@import './iconfont';
 @import './tailwindExtend';
 
 html {
   color: #000;
-  font: 16px/1.625 "Roboto", -apple-system, 'BlinkMacSystemFont', 'Helvetica Neue', 'Helvetica', 'Hiragino Sans GB', Simsun, Arial, sans-self;
+  font: 16px/1.625 -apple-system, 'BlinkMacSystemFont', 'Helvetica Neue', 'Helvetica', 'Hiragino Sans GB', Simsun, Arial, sans-self;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
-  user-select: none;
+  background: #000;
 }
 
 html, body, #app {
@@ -38,28 +38,79 @@ a {
   }
 }
 
-button:focus {
-  outline: none;
+i {
+  user-select: none;
 }
 
 ul {
   list-style: none;
 }
 
-.icon {
-  font-family: 'icon';
-  font-style: normal;
+input {
+  border-bottom: 1px solid $grey;
+  &:focus {
+    outline: none;
+  }
 }
 
-// Notification
-.notification {
-  padding: 12px 25px !important;
-  font-weight: 500 !important;
-  z-index: 999 !important;
-  &.success {
-    background: $green !important;
+label {
+  cursor: inherit;
+}
+
+:focus {
+  outline: none;
+}
+
+// Layout
+.wrapper {
+  min-width: 1024px;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+  &.tight {
+    width: 680px;
   }
-  &.error {
-    background: $red !important;
+}
+
+// Editor related
+[contenteditable=true] {
+  cursor: text;
+}
+
+[contenteditable=true]:empty{
+  &::before {
+    content: attr(placeholder);
+    display: block;
+    color: $grey-light;
+    caret-color: $green;
   }
+}
+.darkTheme {
+  [contenteditable=true]:empty{
+    &::before {
+      color: #848484;
+    }
+  }
+}
+
+// Transition
+.fadeUpHide {
+  transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+  opacity: 0;
+  transform: translateY(15px);
+  pointer-events: none;
+}
+.fadeUpShow {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.opacityHide {
+  transition: opacity 0.35s ease-out;
+  opacity: 0;
+  pointer-events: none;
+}
+.opacityShow {
+  opacity: 1;
+  pointer-events: auto;
 }

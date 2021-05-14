@@ -1,0 +1,33 @@
+@import "components/MethodLabel/index";
+@import "~shared-style/variable";
+
+.MethodSelect {
+  @extend %methodTextRule;
+  &:hover {
+    & > .arrowIcon {
+      opacity: 1;
+    }
+  }
+  & > .arrowIcon {
+    margin-left: -1.43rem;
+    opacity: 0;
+    transition: transform 0.2s ease-out, opacity 0.35s ease-out;
+    &.open {
+      transform: rotate(180deg);
+    }
+    &.smallMargin {
+      margin-left: -1rem;
+    }
+  }
+  & > .options {
+    top: 100%;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    & > .methodItem {
+      background: #fff;
+      &:hover {
+        background: $grey-lightest;
+      }
+    }
+  }
+}

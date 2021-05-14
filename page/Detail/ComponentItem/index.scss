@@ -1,0 +1,62 @@
+@import "~shared-style/variable";
+
+.ComponentItem {
+  .endpointItem {
+    &:hover {
+      .name {
+        color: $blue-purple;
+      }
+    }
+  }
+
+  .componentDesc {
+     a {
+      color: $blue-purple;
+      transition: all 0.25s ease-out;
+      cursor: pointer;
+      &:hover {
+        color: darken($blue-purple, 10%);
+      }
+    }
+  }
+
+  .endpointDetailLeft {
+    &:hover {
+      .endpointLeftHoverShow {
+        opacity: 1 !important;
+      }
+    }
+  }
+
+  .modelIcon {
+    color: #fff;
+    background: transparentize($green, 0.2);
+    line-height: 1.5;
+  }
+
+  /**
+   * Right section
+   */
+  .rightSection {
+    .openAPIHeader {
+      background: #3c4257;
+    }
+    .curlHeader {
+      background: #e3e8ee;
+    }
+    .curlBody {
+      background: #f7fafc;
+    }
+  }
+}
+
+.ComponentItem {
+  /**
+   * Right section
+   */
+  .rightSection {
+    .openAPIHeader {
+      background: #232323;
+    }
+  }
+}

@@ -18,7 +18,9 @@ module.exports = {
       public: path.resolve(__dirname, "../public"),
       decorators: path.resolve(__dirname, "../decorators"),
       libs: path.resolve(__dirname, "../libs"),
-      constant: path.resolve(__dirname, "../config/constant")
+      constant: path.resolve(__dirname, "../config/constant"),
+      utils: path.resolve(__dirname, "../utils"),
+      types: path.resolve(__dirname, "../types")
     }
   },
   stats: {
@@ -65,6 +67,11 @@ module.exports = {
           name: "[name].[ext]",
           limit: 10000
         }
+      },
+      {
+        test: /\.ya?ml$/,
+        type: "json",
+        use: "yaml-loader"
       }
     ]
   },
