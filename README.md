@@ -5,6 +5,8 @@ OpenAPI Editor For Nerds
 
 <img width="1741" alt="截屏2021-05-21 下午4 56 53" src="https://user-images.githubusercontent.com/5305874/119111341-8ddd2900-ba55-11eb-80b8-36f8b92bc8a4.png">
 
+<a href="https://www.producthunt.com/posts/comet-c805180f-852a-4234-a9d7-26239a9e2ce3?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-comet-c805180f-852a-4234-a9d7-26239a9e2ce3" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=296750&theme=light" alt="Comet - openAPI editor for nerds | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+
 ## Details
 Only support for OpenAPI 3+
 
