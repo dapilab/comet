@@ -192,7 +192,7 @@ export default class EndpointItem extends DividerBase {
               className="absolute top-0 right-0"
               options={[{
                 value: "duplicate",
-                label: "Deuplicate"
+                label: "Duplicate"
               }, {
                 value: "remove",
                 label: "Remove"
