@@ -1,37 +1,30 @@
 ## Comet
 OpenAPI Editor For Nerds
 
-### [Online Editor](https://comet.chilllab.io)
-
-<img width="1741" alt="截屏2021-05-21 下午4 56 53" src="https://user-images.githubusercontent.com/5305874/119111341-8ddd2900-ba55-11eb-80b8-36f8b92bc8a4.png">
+<img width="1741" alt="截屏2021-05-21 下午4 56 53" src="https://user-images.githubusercontent.com/5305874/119360280-086baa00-bcdd-11eb-9d76-f3e754348b07.png">
 
 <a href="https://www.producthunt.com/posts/comet-c805180f-852a-4234-a9d7-26239a9e2ce3?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-comet-c805180f-852a-4234-a9d7-26239a9e2ce3" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=296750&theme=light" alt="Comet - openAPI editor for nerds | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
 
-## Details
-Only support for OpenAPI 3+
+## Online Editor
+[https://comet.chilllab.io](https://comet.chilllab.io)
 
-### * Tips for $ref
-<img width="670" alt="截屏2021-05-21 下午5 00 57" src="https://user-images.githubusercontent.com/5305874/119112042-4014f080-ba56-11eb-889b-d2ed3876a1e5.png">
 
-### * Support allOf, oneOf and anyOf
-<img width="670" alt="截屏2021-05-21 下午4 48 01" src="https://user-images.githubusercontent.com/5305874/119112139-5d49bf00-ba56-11eb-841e-165c03f671ec.png">
+## How to run in the local
+#### Env
+* Node 12+
 
-<img width="670" alt="截屏2021-05-21 下午5 03 03" src="https://user-images.githubusercontent.com/5305874/119112222-75b9d980-ba56-11eb-945f-bd626469ed1a.png">
-
-### * Able to edit full schema and API specified schema
-<img width="670" alt="截屏2021-05-21 下午4 50 14" src="https://user-images.githubusercontent.com/5305874/119112031-3e4b2d00-ba56-11eb-88fc-704c41576dda.png">
-<img width="670" alt="截屏2021-05-21 下午4 50 22" src="https://user-images.githubusercontent.com/5305874/119112041-4014f080-ba56-11eb-82e5-bdd3fc5ab622.png">
-
-### * Display Curl for reference
-<img width="670" alt="截屏2021-05-21 下午4 48 11" src="https://user-images.githubusercontent.com/5305874/119112105-5327c080-ba56-11eb-8698-20fd9c03da54.png">
-
+#### Steps
+1. Clone the project into local `git clone git@github.com:chilllab/comet.git`
+2. Into the project, run `yarn` or `npm install` to install dependencies
+3. Run `make dev` to start the webpack-server in the local
+4. Open the browser `http://localhost:8080`
 
 ## TODO
 Still activly working on UIUX and bugs, any PRs, issues and suggestions are welcomed :)
 
 - [ ] Support JSON (only YAML for the moment)
 - [ ] Improve Curl
-- [ ] Light theme
+- [ ] Auth
 
 
 ## License
