@@ -37,6 +37,12 @@ a {
   }
 }
 
+i, a, input, text, button {
+  &:focus {
+    outline: none;
+  }
+}
+
 i {
   user-select: none;
 }

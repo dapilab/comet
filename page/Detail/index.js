@@ -19,10 +19,6 @@ export default class Detail extends Component {
     headerId: PropTypes.string
   };
 
-  static defaultProps = {
-    selectedEndpointIds: []
-  };
-
   constructor(props) {
     super(props);
     this.prevTopIsIntersecting = true;
@@ -79,7 +75,7 @@ export default class Detail extends Component {
       .map((tagId) => endpointStore.tags[tagId].data)
       .reduce((acc, endIds) => acc.concat(endIds), [])
       .filter((endpoinId) => {
-        if (selectedEndpointIds.length === 0) return true;
+        if (!selectedEndpointIds) return true;
         return selectedEndpointIds.includes(endpoinId);
       });
   }

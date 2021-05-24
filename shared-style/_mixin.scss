@@ -40,7 +40,7 @@
 %fadeRightHide {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(8px);
+  transform: translateX(10px);
   transition: opacity 0.25s ease-out, transform 0.25s ease-out;
 }
 .fadeRightHide {
@@ -59,7 +59,7 @@
 %fadeLeftHide {
   opacity: 0;
   pointer-events: none;
-  transform: translateX(-8px);
+  transform: translateX(-10px);
   transition: opacity 0.25s ease-out, transform 0.25s ease-out;
 }
 .fadeLeftHide {

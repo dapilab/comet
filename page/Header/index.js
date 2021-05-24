@@ -39,8 +39,8 @@ export default class Header extends Component {
       searchValue: ""
     }, () => {
       updateState({
-        selectedEndpointIds: [],
-        selectedTagIds: []
+        selectedEndpointIds: null,
+        selectedTagIds: null
       });
     });
   }

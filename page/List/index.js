@@ -21,8 +21,6 @@ export default class List extends Component {
   };
 
   static defaultProps = {
-    selectedEndpointIds: [],
-    selectedTagIds: [],
     style: {}
   };
 
@@ -202,7 +200,7 @@ export default class List extends Component {
         {tagStore.observerTrigger && tagStore.getList()
           .filter((tagId) => {
             if (isAddingDefaultAPI) return true;
-            if (selectedTagIds.length > 0) {
+            if (selectedTagIds) {
               return selectedTagIds.includes(tagId);
             }
             if (tagId !== tagStore.getDefaultTagId()) return true;

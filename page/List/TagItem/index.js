@@ -18,10 +18,6 @@ export default class ListTagItem extends Component {
     selectedEndpointIds: PropTypes.array
   };
 
-  static defaultProps = {
-    selectedEndpointIds: []
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -177,7 +173,7 @@ export default class ListTagItem extends Component {
         {/* API list */}
         {endpointStore.observerTrigger && endpointStore.tags[tagId] && endpointStore.tags[tagId].data
           .filter((endpointId) => {
-            if (selectedEndpointIds.length === 0) return true;
+            if (!selectedEndpointIds) return true;
             return selectedEndpointIds.includes(endpointId);
           })
           .map((endpointId) => {
