@@ -16,12 +16,14 @@ require("./index.scss");
 export default class List extends Component {
   static propTypes = {
     selectedEndpointIds: PropTypes.array,
-    selectedTagIds: PropTypes.array
+    selectedTagIds: PropTypes.array,
+    style: PropTypes.object
   };
 
   static defaultProps = {
     selectedEndpointIds: [],
-    selectedTagIds: []
+    selectedTagIds: [],
+    style: {}
   };
 
   constructor(props) {
@@ -150,10 +152,12 @@ export default class List extends Component {
   }
 
   render() {
-    const { selectedTagIds, selectedEndpointIds } = this.props;
+    const { selectedTagIds, selectedEndpointIds, style } = this.props;
     const { isAddingTag, isAddingComponent, isAddingDefaultAPI } = this.state;
     return (
-      <div className="List h-full overflow-y-auto pb-10">
+      <div
+        className="List h-full overflow-y-auto pb-10"
+        style={style}>
         {/* API header */}
         <div className="apiHeader flex items-center justify-between relative ">
           <p className="mr-2 cursor-default leading-none text-xl tracking-wider font-bold">

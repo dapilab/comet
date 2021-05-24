@@ -18,7 +18,7 @@ export default class ResponsesRender extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMode: "example",
+      currentMode: "model",
       statusCodeIdx: 0
     };
   }
@@ -101,19 +101,19 @@ export default class ResponsesRender extends Component {
         <div className="flex items-center">
           <p
             className={classnames("transition-20 cursor-pointer hover:text-white pr-2", {
-              "grey-light": currentMode !== "example",
-              "text-white": currentMode === "example"
-            })}
-            onClick={this.changeMode.bind(this, "example")}>
-            example
-          </p>
-          <p
-            className={classnames("transition-20 cursor-pointer hover:text-white", {
               "grey-light": currentMode !== "model",
               "text-white": currentMode === "model"
             })}
             onClick={this.changeMode.bind(this, "model")}>
             schema
+          </p>
+          <p
+            className={classnames("transition-20 cursor-pointer hover:text-white", {
+              "grey-light": currentMode !== "example",
+              "text-white": currentMode === "example"
+            })}
+            onClick={this.changeMode.bind(this, "example")}>
+            example
           </p>
         </div>
 

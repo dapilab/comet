@@ -1,8 +1,6 @@
 @import "shared-style/variable";
 
 .List {
-  flex: 0 0 16rem;
-  margin-right: 2.5rem;
   &:hover {
     .listHoverShow {
       opacity: 1;

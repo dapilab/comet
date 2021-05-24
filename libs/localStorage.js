@@ -1,5 +1,16 @@
 export default {
-  get: (key) => window.localStorage.getItem(key),
+  get: (key, type) => {
+    const value = window.localStorage.getItem(key);
+    if (!value) return value;
+    switch (type) {
+      case "int":
+        return parseInt(value, 10);
+      case "float":
+        return parseFloat(value);
+      default:
+        return value;
+    }
+  },
 
   set: (key, value) => {
     if (typeof value === "number") value = String(value);

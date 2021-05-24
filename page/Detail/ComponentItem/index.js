@@ -1,9 +1,10 @@
-import React, { Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
 import showdown from "showdown";
 import DOMPurify from "dompurify";
 import classnames from "classnames";
+import { DraggableCore } from "react-draggable";
 
 import { componentStore } from "stores";
 
@@ -12,7 +13,6 @@ import { getComponentBlockId } from "utils/helper";
 
 import Text from "components/Text";
 import SubMenu from "components/SubMenu";
-import DividerBase from "../DividerBase";
 import CodeMirror from "../CodeMirror";
 
 require("./index.scss");
@@ -20,9 +20,11 @@ require("./index.scss");
 const converter = new showdown.Converter({ openLinksInNewWindow: true });
 
 @observer
-export default class ComponentItem extends DividerBase {
+export default class ComponentItem extends Component {
   static propTypes = {
-    componentId: PropTypes.string
+    componentId: PropTypes.string,
+    handleWidthDrag: PropTypes.func,
+    rightClass: PropTypes.string
   }
 
   constructor(props) {
@@ -62,7 +64,7 @@ export default class ComponentItem extends DividerBase {
   }
 
   render() {
-    const { componentId } = this.props;
+    const { componentId, handleWidthDrag, rightClass } = this.props;
     const { isAPIExpanded } = this.state;
 
     const component = componentStore.observerTrigger && componentStore.data[componentId];
@@ -79,11 +81,9 @@ export default class ComponentItem extends DividerBase {
     return (
       <div
         id={getComponentBlockId(componentId)}
-        className="ComponentItem ml-5 flex justify-center">
+        className="ComponentItem ml-5 flex justify-end">
         {/* Left schema */}
-        <div
-          className={this.leftPartClass}
-          style={this.leftPartStyle}>
+        <div className="componentDetailLeft">
           <div className="relative pr-8">
             {/* Name */}
             <div className="flex items-center">
@@ -122,10 +122,17 @@ export default class ComponentItem extends DividerBase {
           </div>
         </div>
 
+        {/* Center divider */}
+        <DraggableCore axis="x" onDrag={handleWidthDrag}>
+          <div
+            className="self-stretch cursor-col-resize"
+            style={{ flex: "0 0 8rem" }} />
+        </DraggableCore>
+
         {/* Right part */}
         <div
-          className="flex-1 rightSection"
-          style={this.rightPartStyle}>
+          className={classnames("rightSection", rightClass)}
+          style={{ flex: "0 0 30vw" }}>
           {/* Open API */}
           <Fragment>
             {/* Open API: header */}

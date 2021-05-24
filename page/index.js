@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { observer } from "mobx-react";
+import { DraggableCore } from "react-draggable";
 
 import { appStore } from "stores";
 
@@ -28,6 +29,7 @@ export default class Application extends Component {
 
     this.headerId = "header";
     this.mainId = "main";
+    this.storageKeyForWidth = "__api_list_width__";
 
     this.saveCurrentSchema = this.saveCurrentSchema.bind(this);
   }
@@ -37,6 +39,10 @@ export default class Application extends Component {
     const headerHeight = document.getElementById(this.headerId).clientHeight;
     const mainHTML = document.getElementById(this.mainId);
     mainHTML.style.height = `calc(100vh - ${headerHeight}px)`;
+
+    // Setup list width
+    const listWidth = localStorage.get(this.storageKeyForWidth, "float") || 16;
+    this.setState({ listWidth });
 
     // Load latest project
     let projects = localStorage.get(STORAGE_KEYS.PROJECTS);
@@ -62,6 +68,24 @@ export default class Application extends Component {
     window.removeEventListener("beforeunload", this.saveCurrentSchema);
   }
 
+  // Width related
+  handleWidthDrag(e) {
+    e.preventDefault();
+    const { listWidth } = this.state;
+    const maxListWidth = 30;
+    const minListWidth = 10;
+    let newListWidth = listWidth + e.movementX / 15;
+    newListWidth = Math.max(Math.min(newListWidth, maxListWidth), minListWidth);
+    this.setState({
+      listWidth: newListWidth
+    });
+  }
+
+  saveWidthIntoStorage() {
+    const { listWidth } = this.state;
+    localStorage.set(this.storageKeyForWidth, listWidth);
+  }
+
   updateState(data) {
     this.setState(data);
   }
@@ -78,7 +102,7 @@ export default class Application extends Component {
   }
 
   render() {
-    const { selectedEndpointIds, selectedTagIds, isFullSchemaOpen } = this.state;
+    const { selectedEndpointIds, selectedTagIds, isFullSchemaOpen, listWidth } = this.state;
     return (
       <div className="app darkTheme">
         {/* Header */}
@@ -94,7 +118,14 @@ export default class Application extends Component {
               {/* Left list */}
               <List
                 selectedTagIds={selectedTagIds}
-                selectedEndpointIds={selectedEndpointIds} />
+                selectedEndpointIds={selectedEndpointIds}
+                style={{ flex: `0 0 ${listWidth}rem` }} />
+
+              <DraggableCore axis="x" onDrag={::this.handleWidthDrag}>
+                <div
+                  className="self-stretch cursor-col-resize w-8"
+                  style={{ flex: "0 0 2rem" }} />
+              </DraggableCore>
 
               {/* Right detail content */}
               <Detail

@@ -1,7 +1,7 @@
-import React, { Fragment } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
-// import { DraggableCore } from "react-draggable";
+import { DraggableCore } from "react-draggable";
 import classnames from "classnames";
 import showdown from "showdown";
 import DOMPurify from "dompurify";
@@ -14,7 +14,6 @@ import { toCurl } from "libs/render";
 
 import Text from "components/Text";
 import SubMenu from "components/SubMenu";
-import DividerBase from "../DividerBase";
 import CodeMirror from "../CodeMirror";
 import MethodSelect from "./MethodSelect/index";
 import ParameterRender from "./ParameterRender";
@@ -26,13 +25,15 @@ require("./index.scss");
 const converter = new showdown.Converter({ openLinksInNewWindow: true });
 
 @observer
-export default class EndpointItem extends DividerBase {
+export default class EndpointItem extends Component {
   static propTypes = {
     endpointId: PropTypes.string,
     nextEndpointId: PropTypes.string,
     idx: PropTypes.number,
     detailId: PropTypes.string,
-    headerId: PropTypes.string
+    headerId: PropTypes.string,
+    handleWidthDrag: PropTypes.func,
+    rightClass: PropTypes.string
   }
 
   constructor(props) {
@@ -159,7 +160,7 @@ export default class EndpointItem extends DividerBase {
   }
 
   render() {
-    const { endpointId, idx } = this.props;
+    const { endpointId, idx, handleWidthDrag, rightClass } = this.props;
     const { isAPIExpanded, isCopied } = this.state;
 
     const endpoint = endpointStore.observerTrigger && endpointStore.data[endpointId];
@@ -168,11 +169,9 @@ export default class EndpointItem extends DividerBase {
     return (
       <div
         id={getEndpointBlockId(endpointId)}
-        className={classnames("EndpointBlock ml-5 flex justify-center", { first: idx === 0 })}>
+        className={classnames("EndpointItem ml-5 flex justify-end", { first: idx === 0 })}>
         {/* Left part */}
-        <div
-          className={this.leftPartClass}
-          style={this.leftPartStyle}>
+        <div className="endpointDetailLeft">
           <div className="relative pr-8 mb-2">
             {/* Name */}
             <Text
@@ -225,16 +224,16 @@ export default class EndpointItem extends DividerBase {
         </div>
 
         {/* Center divider */}
-        {/* <DraggableCore axis="x" onDrag={::this.handleWidthDrag}>
+        <DraggableCore axis="x" onDrag={handleWidthDrag}>
           <div
-            className="self-stretch cursor-ew-resize"
-            style={{ flex: this.draggerDefaultFlex }} />
-        </DraggableCore> */}
+            className="self-stretch cursor-col-resize"
+            style={{ flex: "0 0 8rem" }} />
+        </DraggableCore>
 
         {/* Right part */}
         <div
-          className="flex-1 rightSection"
-          style={this.rightPartStyle}>
+          className={classnames("rightSection", rightClass)}
+          style={{ flex: "0 0 30vw" }}>
           {/* Open API */}
           {/* Open API: header */}
           <div className="rounded-t-lg flex items-center justify-between py-2 px-5 openAPIHeader">
