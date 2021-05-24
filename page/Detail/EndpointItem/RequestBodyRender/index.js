@@ -48,12 +48,12 @@ export default class RequestBodyRender extends Component {
           <div className="mt-5">
             {/* Header */}
             <div className="gradientBorder mb-2">
-              <p className="text-white text-sm relative leading-none">Body</p>
+              <p className="text-sm relative leading-none">Body</p>
             </div>
 
             {/* Content-type */}
             {contentType &&
-              <p className="leading-tight text-sm grey-light pb-1">
+              <p className="leading-tight text-sm grey-light py-2">
                 {contentType}
               </p>
             }
@@ -61,17 +61,17 @@ export default class RequestBodyRender extends Component {
             {/* Select example or schema */}
             <div className="flex items-center">
               <p
-                className={classnames("transition-20 cursor-pointer hover:text-white pr-2", {
+                className={classnames("transition-20 cursor-pointer hover:text-black text-sm pr-2", {
                   "grey-light": currentMode !== "model",
-                  "text-white": currentMode === "model"
+                  "text-black": currentMode === "model"
                 })}
                 onClick={this.changeMode.bind(this, "model")}>
                 schema
               </p>
               <p
-                className={classnames("transition-20 cursor-pointer hover:text-white", {
+                className={classnames("transition-20 cursor-pointer hover:text-black text-sm", {
                   "grey-light": currentMode !== "example",
-                  "text-white": currentMode === "example"
+                  "text-black": currentMode === "example"
                 })}
                 onClick={this.changeMode.bind(this, "example")}>
                 example

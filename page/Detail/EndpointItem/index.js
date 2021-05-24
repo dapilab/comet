@@ -97,7 +97,7 @@ export default class EndpointItem extends Component {
 
       const endpointBlockId = getEndpointBlockId(endpointId);
       this.observer.observe(document.getElementById(endpointBlockId));
-    }, 1000);
+    }, 100);
   }
 
   componentWillUnmount() {
@@ -178,7 +178,7 @@ export default class EndpointItem extends Component {
               content={endpoint.name}
               placeholder="Name..."
               onSave={this.updateEndpoint.bind(this, "name")}
-              className="text-xl leading-tight"
+              className="text-2xl leading-tight"
               enterForSave
               trim />
             {/* Description */}
@@ -204,7 +204,7 @@ export default class EndpointItem extends Component {
           </div>
 
           {/* Url */}
-          <div className="flex items-center pb-3 ">
+          <div className="flex items-center">
             <div className="font-medium mr-2">
               <MethodSelect
                 method={endpoint.method}
@@ -282,7 +282,7 @@ export default class EndpointItem extends Component {
               {/* Curl: body */}
               <div className="rounded-b-lg curlBody text-sm py-3 px-5">
                 <p>
-                  <span className="inline-block mr-1 purple">$</span>
+                  <span className="inline-block mr-1 blue-purple">$</span>
                   <span className=" break-all">{curlContent}</span>
                 </p>
               </div>

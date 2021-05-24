@@ -1,7 +1,6 @@
 @import "~shared-style/variable";
 
 .EndpointItem {
-  min-height: 70vh;
   &.first {
     .sectionTitle {
       .iconarrow-right {
@@ -29,11 +28,10 @@
     width: 7rem;
     text-align: center;
     padding: 0.45rem 0;
-    color: #fff;
     &:before {
       content: "";
       position: absolute;
-      background: #000;
+      background: #fff;
       width: calc(100% - 2px);
       height: calc(100% - 2px);
       left: 1px;

@@ -19,8 +19,12 @@
   .componentItem {
     cursor: pointer;
     transition: all 0.25s ease-out;
-    &.active, &:hover {
+    border-radius: 10px;
+    &:hover, &.active {
       color: $blue-purple;
+      padding-left: 10px;
+      background: rgba(0, 0, 0, 0.02);
+      font-weight: bold;
     }
   }
 }

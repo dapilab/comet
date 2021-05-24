@@ -271,7 +271,7 @@ export default class List extends Component {
             <div
               key={componentId}
               id={getListComponentId(componentId)}
-              className={classnames("flex items-center componentItem leading-none text-sm grey-light", {
+              className={classnames("flex items-center componentItem leading-none text-sm", {
                 "py-2": idx !== 0,
                 "pb-2": idx === 0
               })}

@@ -104,7 +104,7 @@ export default class Application extends Component {
   render() {
     const { selectedEndpointIds, selectedTagIds, isFullSchemaOpen, listWidth } = this.state;
     return (
-      <div className="app darkTheme">
+      <div className="app">
         {/* Header */}
         <Header
           id={this.headerId}

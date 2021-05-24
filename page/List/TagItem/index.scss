@@ -21,8 +21,15 @@
     transition: all 0.2s ease-out;
     cursor: pointer;
     border-radius: 10px;
+    line-height: 1;
+    padding: 0.5rem 0;
     &:hover, &.active {
       color: $blue-purple;
+      padding-left: 10px;
+      font-weight: bold;
+    }
+    &:active {
+      background: rgba(0, 0, 0, 0.02);
     }
   }
 }

@@ -126,7 +126,7 @@ export default class ListTagItem extends Component {
           className="tagHeader flex items-center justify-between relative">
           {/* Tag name */}
           <Text
-            className="title mr-2 text-sm"
+            className="title mr-2 text-sm font-bold"
             placeholder="Tag name..."
             content={isDefaultTag && "Default" || tag.name}
             onSave={::this.changeTagName}
@@ -186,7 +186,7 @@ export default class ListTagItem extends Component {
               <p
                 key={endpointId}
                 id={getListEndpointId(endpointId)}
-                className="endpointItem grey-light text-sm py-1 truncate"
+                className="endpointItem text-sm truncate"
                 onClick={jumpToEndpoint.bind(this, endpointId)}>
                 {endpoint.name || endpoint.description || `${endpoint.method} ${endpoint.url}`}
               </p>

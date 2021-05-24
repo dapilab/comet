@@ -45,7 +45,7 @@ export default class ParameterRender extends Component {
         {header.length > 0 &&
           <div className="flex flex-col mt-5">
             <div className="gradientBorder mb-2">
-              <p className="text-white text-sm relative leading-none">Header</p>
+              <p className="text-sm relative leading-none">Header</p>
             </div>
             <div className="text-sm">
               {header}
@@ -55,7 +55,7 @@ export default class ParameterRender extends Component {
         {path.length > 0 &&
           <div className="flex flex-col mt-5">
             <div className="gradientBorder mb-2">
-              <p className="text-white text-sm relative leading-none">Path</p>
+              <p className="text-sm relative leading-none">Path</p>
             </div>
             <div className="text-sm">
               {path}
@@ -65,7 +65,7 @@ export default class ParameterRender extends Component {
         {query.length > 0 &&
           <div className="flex flex-col mt-5">
             <div className="gradientBorder mb-2">
-              <p className="text-white text-sm relative leading-none">Query</p>
+              <p className="text-sm relative leading-none">Query</p>
             </div>
             <div className="text-sm">
               {query}

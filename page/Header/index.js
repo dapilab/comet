@@ -125,7 +125,7 @@ export default class Header extends Component {
         <div className="flex items-center">
           <i className="iconfont icon-search grey-light mr-2" />
           <input
-            className="input text-sm w-64 bg-transparent"
+            className="input text-sm w-48 bg-transparent"
             placeholder="Search API name/url/desc ..."
             value={searchValue}
             onChange={::this.onChangeSearchValue}
@@ -135,7 +135,7 @@ export default class Header extends Component {
             fadeRightShow: searchValue
           })}>
             <button
-              className="btn primary py-1 px-4 ml-2 mr-3"
+              className="btn primary py-2 px-6 ml-2 mr-3 leading-none"
               onClick={::this.goSearch}>
               Search
             </button>

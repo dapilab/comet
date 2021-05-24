@@ -63,7 +63,7 @@ export default class ResponsesRender extends Component {
         <div className="pt-2 flex items-center mb-2">
           {/* Title */}
           <div className="gradientBorder mr-4">
-            <p className="text-white text-sm relative leading-none">Response</p>
+            <p className="text-sm relative leading-none">Response</p>
           </div>
           {/* Statuc code */}
           <div className="flex flex-wrap">
@@ -87,7 +87,7 @@ export default class ResponsesRender extends Component {
 
         {/* Content-type and description */}
         {(contentType || description) &&
-          <p className="leading-tight text-sm grey-light pb-1">
+          <p className="leading-tight text-sm grey-light py-2">
             {/* Content type */}
             {contentType && <span>{contentType}</span>}
             {/* Divider */}
@@ -100,17 +100,17 @@ export default class ResponsesRender extends Component {
         {/* Example or schema */}
         <div className="flex items-center">
           <p
-            className={classnames("transition-20 cursor-pointer hover:text-white pr-2", {
+            className={classnames("transition-20 cursor-pointer hover:text-black text-sm pr-2", {
               "grey-light": currentMode !== "model",
-              "text-white": currentMode === "model"
+              "text-black": currentMode === "model"
             })}
             onClick={this.changeMode.bind(this, "model")}>
             schema
           </p>
           <p
-            className={classnames("transition-20 cursor-pointer hover:text-white", {
+            className={classnames("transition-20 cursor-pointer hover:text-black text-sm", {
               "grey-light": currentMode !== "example",
-              "text-white": currentMode === "example"
+              "text-black": currentMode === "example"
             })}
             onClick={this.changeMode.bind(this, "example")}>
             example

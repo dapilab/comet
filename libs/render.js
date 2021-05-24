@@ -289,7 +289,7 @@ export const renderModelAttribute = (
       const attributeElem = renderModelAttribute("", itemSchema, { alwaysShowCurrent: true });
       return (
         <div className="relative" key={idx}>
-          <label className="absolute left-0 -ml-5 py-2 orange">{idx + 1}.</label>
+          <label className="absolute left-0 -ml-5 py-2 orange leading-none">{idx + 1}.</label>
           {attributeElem}
         </div>
       );
