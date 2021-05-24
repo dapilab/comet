@@ -8,6 +8,9 @@ OpenAPI Editor For Nerds
 ## Online Editor
 [https://comet.chilllab.io](https://comet.chilllab.io)
 
+## Example
+[Petstore](https://comet.chilllab.io?example=petstore)
+
 
 ## How to run in the local
 #### Env
@@ -25,6 +28,20 @@ Still activly working on UIUX and bugs, any PRs, issues and suggestions are welc
 - [ ] Support JSON (only YAML for the moment)
 - [ ] Improve Curl
 - [ ] Auth
+
+## Help
+#### How to start working on my API
+* Import from outside file: Click the `Full Schema` in top-right, copy/paste your openAPI yaml and click `Save`
+* From scratch: Mouse hover to the left `API` and `Component`, click `+` to create your api and component
+
+#### How to create new project
+Click the `New Project` in top-right
+
+#### Where is my data saved
+All in your local storage, so don't add too much projects :)
+
+#### How to remove the project
+In the top-right corner, click your project name, a project list will be show up and the first option is removing
 
 
 ## License

@@ -15,11 +15,14 @@ import FullSchema from "./FullSchema";
 require("../shared-style/basic.scss");
 require("./index.scss");
 
+const petstoreYAML = require("../examples/petstore.yaml");
+
 @observer
 export default class Application extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      isExample: false,
       // Searching
       selectedEndpointIds: null,
       selectedTagIds: null,
@@ -27,6 +30,7 @@ export default class Application extends Component {
       isFullSchemaOpen: false
     };
 
+    this.isExample = false;
     this.headerId = "header";
     this.mainId = "main";
     this.storageKeyForWidth = "__api_list_width__";
@@ -35,6 +39,18 @@ export default class Application extends Component {
   }
 
   componentDidMount() {
+    // Check if is example
+    let isExample = false;
+    let example = null;
+    if (/\/\?/.test(window.location.href)) {
+      const query = window.location.href.replace(/\S*\/\?/, " ").trim();
+      const res = query.split("=");
+      if (res[0] === "example") {
+        isExample = true;
+        example = res[1];
+      }
+    }
+
     // Setup main height
     const headerHeight = document.getElementById(this.headerId).clientHeight;
     const mainHTML = document.getElementById(this.mainId);
@@ -42,30 +58,52 @@ export default class Application extends Component {
 
     // Setup list width
     const listWidth = localStorage.get(this.storageKeyForWidth, "float") || 16;
-    this.setState({ listWidth });
 
-    // Load latest project
-    let projects = localStorage.get(STORAGE_KEYS.PROJECTS);
-    projects = projects && JSON.parse(projects) || [];
-    if (projects.length === 0) {
-      // No project, create a new default project
-      appStore.create();
-    } else {
-      const latestProjectId = projects[0];
-      const latestProject = localStorage.get(latestProjectId);
-      if (!latestProject) {
-        appStore.create();
-      } else {
-        appStore.loadFromSchema(JSON.parse(latestProject));
-        appStore.load(latestProjectId, JSON.parse(latestProject));
+    this.setState({
+      isExample,
+      listWidth
+    });
+
+    // Load example
+    if (isExample) {
+      switch (example) {
+        case "petstore": {
+          appStore.loadFromSchema(petstoreYAML);
+          appStore.load(appStore.id, petstoreYAML);
+          return;
+        }
       }
     }
 
-    window.addEventListener("beforeunload", this.saveCurrentSchema);
+    // Load latest project
+    if (!isExample) {
+      let projects = localStorage.get(STORAGE_KEYS.PROJECTS);
+      projects = projects && JSON.parse(projects) || [];
+      if (projects.length === 0) {
+        // No project, create a new default project
+        appStore.create();
+      } else {
+        const latestProjectId = projects[0];
+        const latestProject = localStorage.get(latestProjectId);
+        if (!latestProject) {
+          appStore.create();
+        } else {
+          appStore.loadFromSchema(JSON.parse(latestProject));
+          appStore.load(latestProjectId, JSON.parse(latestProject));
+        }
+      }
+    }
+
+    if (!isExample) {
+      window.addEventListener("beforeunload", this.saveCurrentSchema);
+    }
   }
 
   componentWillUnmount() {
-    window.removeEventListener("beforeunload", this.saveCurrentSchema);
+    const { isExample } = this.state;
+    if (!isExample) {
+      window.removeEventListener("beforeunload", this.saveCurrentSchema);
+    }
   }
 
   // Width related
@@ -102,14 +140,15 @@ export default class Application extends Component {
   }
 
   render() {
-    const { selectedEndpointIds, selectedTagIds, isFullSchemaOpen, listWidth } = this.state;
+    const { selectedEndpointIds, selectedTagIds, isFullSchemaOpen, listWidth, isExample } = this.state;
     return (
       <div className="app">
         {/* Header */}
         <Header
           id={this.headerId}
           updateState={::this.updateState}
-          toggleFullSchmea={::this.toggleFullSchmea} />
+          toggleFullSchmea={::this.toggleFullSchmea}
+          isExample={isExample} />
 
         {/* Main */}
         <div id={this.mainId} className="flex wrapper">

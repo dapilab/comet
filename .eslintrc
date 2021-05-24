@@ -76,6 +76,8 @@
     "no-use-before-define": "off",
     "react/no-unescaped-entities": "off",
     "react/no-danger": "off",
-    "prefer-destructuring": "off"
+    "prefer-destructuring": "off",
+    "jsx-a11y/control-has-associated-label": "off",
+    "jsx-a11y/anchor-has-content": "off"
   }
 }

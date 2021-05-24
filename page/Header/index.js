@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { observer } from "mobx-react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
@@ -14,7 +14,8 @@ export default class Header extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     updateState: PropTypes.func.isRequired,
-    toggleFullSchmea: PropTypes.func
+    toggleFullSchmea: PropTypes.func,
+    isExample: PropTypes.bool
   };
 
   constructor(props) {
@@ -98,7 +99,7 @@ export default class Header extends Component {
   }
 
   render() {
-    const { id, toggleFullSchmea } = this.props;
+    const { id, toggleFullSchmea, isExample } = this.props;
     const { searchValue } = this.state;
 
     let projectIds = localStorage.get(STORAGE_KEYS.PROJECTS);
@@ -155,24 +156,31 @@ export default class Header extends Component {
               onClick={toggleFullSchmea}>
               Full Schema
             </p>
-            <p
-              className="px-5 cursor-pointer hover:opacity-75 transition-20 py-2"
-              onClick={::this.onCreateNew}>
-              New Project
-            </p>
-            <SubMenu
-              options={[{
-                value: "remove",
-                label: `Remove ${projectName}`,
-                color: "#EE726D"
-              }].concat(projectOpts)}
-              align="right"
-              onChange={::this.selectProject}>
-              <p className="pl-5 cursor-pointer hover:opacity-75 transition-20 py-2">
-                {projectName}
-                <i className="iconfont icon-arrow-down ml-1 font-bold" />
-              </p>
-            </SubMenu>
+            {!isExample &&
+              <Fragment>
+                <p
+                  className="px-5 cursor-pointer hover:opacity-75 transition-20 py-2"
+                  onClick={::this.onCreateNew}>
+                  New Project
+                </p>
+                <SubMenu
+                  options={[{
+                    value: "remove",
+                    label: `Remove ${projectName}`,
+                    color: "#EE726D"
+                  }].concat(projectOpts)}
+                  align="right"
+                  onChange={::this.selectProject}>
+                  <p className="pl-5 cursor-pointer hover:opacity-75 transition-20 py-2">
+                    {projectName}
+                    <i className="iconfont icon-arrow-down ml-1 font-bold" />
+                  </p>
+                </SubMenu>
+              </Fragment>
+            }
+            <a
+              className="iconfont icon-github transition-20 hover:opacity-50 text-lg ml-6"
+              href="https://github.com/chilllab/comet" />
           </div>
         }
       </header>

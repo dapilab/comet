@@ -128,32 +128,6 @@ export default class Detail extends Component {
               rightClass={this.rightClass} />
           </div>
         ))}
-
-        {endpointIds.length === 0 && componentStore.list.length === 0 &&
-          <div className="w-full h-full flex flex-col items-center grey">
-            <div className="w-1/2 text-sm">
-              <p className="font-mono text-base text-white">How to start</p>
-              <p>Click the `Full Schema` in top-right, copy/paste your openAPI yaml and click `Save`</p>
-              <p className="text-white">Or</p>
-              <p>Mouse hover to the left `API` and `Component`, click `+` to create your api and component</p>
-            </div>
-
-            <div className="w-1/2 text-sm mt-10">
-              <p className="font-mono text-base text-white">How to create new project</p>
-              <p>Click the `New Project` in top-right</p>
-            </div>
-
-            <div className="w-1/2 text-sm mt-10">
-              <p className="font-mono text-base text-white">Where is my data saved</p>
-              <p>All in your local storage, so don't add too much projects :)</p>
-            </div>
-
-            <div className="w-1/2 text-sm mt-10">
-              <p className="font-mono text-lg text-white">How to remove my current project</p>
-              <p>In the top-right corner, click your project name, a project list will be show up and the first option is removing</p>
-            </div>
-          </div>
-        }
       </div>
     );
   }
