@@ -20,7 +20,12 @@ require("./index.scss");
 export default class CodeMirrorComponet extends Component {
   static propTypes = {
     id: PropTypes.string,
-    type: PropTypes.oneOf(["endpoint", "component"])
+    type: PropTypes.oneOf(["endpoint", "component"]),
+    mode: PropTypes.oneOf(["yaml", "json"])
+  }
+
+  static defaultProps = {
+    mode: "yaml"
   }
 
   constructor(props) {
@@ -31,7 +36,11 @@ export default class CodeMirrorComponet extends Component {
   }
 
   async componentDidMount() {
-    const { id, type } = this.props;
+    this.initEditor();
+  }
+
+  initEditor() {
+    const { id, type, mode } = this.props;
 
     let openAPIJSON;
     switch (type) {
@@ -43,13 +52,26 @@ export default class CodeMirrorComponet extends Component {
         break;
     }
 
-    const yamlString = YAML.dump(openAPIJSON);
+    let initialValue = "";
+    let codemirrorMode = "";
+    switch (mode) {
+      case "yaml": {
+        initialValue = YAML.dump(openAPIJSON);
+        codemirrorMode = "yaml";
+        break;
+      }
+      case "json": {
+        initialValue = JSON.stringify(openAPIJSON, null, 2);
+        codemirrorMode = { name: "javascript", json: true };
+        break;
+      }
+    }
 
     // Initial code mirror
     const htmlElem = document.getElementById(this.codeMirrorId);
     this.myCodeMirror = CodeMirror(htmlElem, {
-      value: yamlString,
-      mode: "yaml",
+      value: initialValue,
+      mode: codemirrorMode,
       tabSize: 2,
       indentUnit: 2,
       indentWithTabs: false,
@@ -67,6 +89,7 @@ export default class CodeMirrorComponet extends Component {
       lint: {
         getAnnotations: openapiLint(type),
         onUpdateLinting: async (errors) => {
+          const { mode } = this.props;
           if (!this.codeMirrorFirstLint) {
             this.codeMirrorFirstLint = true;
             return;
@@ -75,11 +98,22 @@ export default class CodeMirrorComponet extends Component {
           const hasError = errors.length > 0;
           if (!hasError) {
             try {
-              const yaml = this.myCodeMirror.getValue().trim();
-              if (!yaml) return;
-              const json = YAML.load(yaml, {
-                schema: YAML.CORE_SCHEMA
-              });
+              const output = this.myCodeMirror.getValue().trim();
+              if (!output) return;
+
+              let json;
+              switch (mode) {
+                case "yaml": {
+                  json = YAML.load(output, {
+                    schema: YAML.CORE_SCHEMA
+                  });
+                  break;
+                }
+                case "json": {
+                  json = JSON.parse(output);
+                  break;
+                }
+              }
               await this.parseAndSave(json);
             } catch (err) {
               return err;
