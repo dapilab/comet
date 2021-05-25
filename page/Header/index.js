@@ -121,7 +121,7 @@ export default class Header extends Component {
     return (
       <header
         id={id}
-        className="py-5 wrapper flex items-center justify-between">
+        className="py-2 wrapper flex items-center justify-between">
         {/* Search input */}
         <div className="flex items-center">
           <i className="iconfont icon-search grey-light mr-2" />

@@ -1,8 +1,6 @@
-@import "components/MethodLabel/index";
 @import "~shared-style/variable";
 
 .MethodSelect {
-  @extend %methodTextRule;
   &:hover {
     & > .arrowIcon {
       opacity: 1;

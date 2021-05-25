@@ -1,4 +1,5 @@
 @import "~shared-style/variable";
+@import "~shared-style/mixin";
 
 .Detail {
   .attributeBorderBottom:not(:last-of-type) {
@@ -12,8 +13,14 @@
   }
 
   .endpointDetailLeft, .componentDetailLeft {
-    flex: 0 0 30vw;
     max-width: 550px;
+    flex: 0 0 10vw;
+    @include breakpoint(desktop) {
+      flex: 0 0 25vw;
+    }
+    @include breakpoint(highres) {
+      flex: 0 0 30vw;
+    }
     &:hover {
       .endpointLeftHoverShow {
         opacity: 1 !important;

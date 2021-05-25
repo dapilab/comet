@@ -1,4 +1,22 @@
 @import "~shared-style/variable";
+@import "~shared-style/mixin";
+
+.listWidthDragger {
+  flex: 0 0 1rem;
+  @include breakpoint(desktop) {
+    flex: 0 0 2rem;
+  }
+}
+
+.detailWidthDragger {
+  flex: 0 0 3rem;
+  @include breakpoint(desktop) {
+    flex: 0 0 5rem;
+  }
+  @include breakpoint(highres) {
+    flex: 0 0 8rem;
+  }
+}
 
 .darkTheme {
   background: #000;

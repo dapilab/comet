@@ -161,9 +161,7 @@ export default class Application extends Component {
                 style={{ flex: `0 0 ${listWidth}rem` }} />
 
               <DraggableCore axis="x" onDrag={::this.handleWidthDrag}>
-                <div
-                  className="self-stretch cursor-col-resize w-8"
-                  style={{ flex: "0 0 2rem" }} />
+                <div className="self-stretch cursor-col-resize w-8 listWidthDragger" />
               </DraggableCore>
 
               {/* Right detail content */}

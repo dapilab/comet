@@ -205,14 +205,14 @@ export default class EndpointItem extends Component {
 
           {/* Url */}
           <div className="flex items-center">
-            <div className="font-medium mr-2">
+            <div className="font-medium mr-2 methodSelect">
               <MethodSelect
                 method={endpoint.method}
                 onChange={::this.changeMethod} />
             </div>
 
             <Text
-              className="tracking-wide"
+              className="tracking-wide leading-tight"
               content={endpoint.url}
               placeholder="URL..."
               onSave={this.updateEndpoint.bind(this, "url")} />
@@ -225,9 +225,7 @@ export default class EndpointItem extends Component {
 
         {/* Center divider */}
         <DraggableCore axis="x" onDrag={handleWidthDrag}>
-          <div
-            className="self-stretch cursor-col-resize"
-            style={{ flex: "0 0 8rem" }} />
+          <div className="self-stretch cursor-col-resize detailWidthDragger" />
         </DraggableCore>
 
         {/* Right part */}

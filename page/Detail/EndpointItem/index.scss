@@ -22,6 +22,11 @@
     }
   }
 
+  .methodSelect {
+    position: relative;
+    top: 0.05rem;
+  }
+
   .gradientBorder {
     background: linear-gradient(90deg, rgba(95,183,255,1) 0%, rgba(252,133,133,1) 100%);
     position: relative;

@@ -124,9 +124,7 @@ export default class ComponentItem extends Component {
 
         {/* Center divider */}
         <DraggableCore axis="x" onDrag={handleWidthDrag}>
-          <div
-            className="self-stretch cursor-col-resize"
-            style={{ flex: "0 0 8rem" }} />
+          <div className="self-stretch cursor-col-resize detailWidthDragger" />
         </DraggableCore>
 
         {/* Right part */}

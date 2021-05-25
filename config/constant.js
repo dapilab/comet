@@ -4,7 +4,10 @@ export const methodToLabelMapping = {
   patch: "PATCH",
   delete: "DELETE",
   put: "PUT",
-  head: "HEAD"
+  head: "HEAD",
+  connect: "CONNECT",
+  options: "OPTIONS",
+  trace: "TRACE"
 };
 
 export const methodToClassName = {
@@ -13,7 +16,10 @@ export const methodToClassName = {
   patch: "patchGreen",
   delete: "delRed",
   put: "putGreen",
-  head: "headPurple"
+  head: "headPurple",
+  connect: "connectYellow",
+  options: "optionsBrown",
+  trace: "traceCyan"
 };
 
 // Key code

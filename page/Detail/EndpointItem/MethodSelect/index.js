@@ -90,11 +90,13 @@ export default class MethodSelect extends Component {
         })}>
           {methodLabel}
         </label>
-        <i className={classnames("iconfont icon-arrow-down font-bold cursor-pointer arrowIcon absolute left-0 text-lg top-0 leading-tight",
-          methodColorClass,
-          {
-            open: isOpen
-          })} />
+        <div className="arrowIcon flex items-center justify-center absolute left-0 text-lg top-0 bottom-0">
+          <i className={classnames("iconfont icon-arrow-down font-bold cursor-pointer",
+            methodColorClass,
+            {
+              open: isOpen
+            })} />
+        </div>
         <div
           className={classnames(
             "options absolute left-0 rounded mt-1 bg-white z-10 py-2 fadeUpHide text-sm",
