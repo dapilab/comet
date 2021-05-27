@@ -3,8 +3,6 @@ OpenAPI Editor For Nerds
 
 <img width="1741" alt="截屏2021-05-21 下午4 56 53" src="https://user-images.githubusercontent.com/5305874/119372559-0825db80-bcea-11eb-9237-4b23bf01349e.png">
 
-<a href="https://www.producthunt.com/posts/comet-c805180f-852a-4234-a9d7-26239a9e2ce3?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-comet-c805180f-852a-4234-a9d7-26239a9e2ce3" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=296750&theme=light" alt="Comet - openAPI editor for nerds | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-
 ## Online Editor
 [https://comet.chilllab.io](https://comet.chilllab.io)
 
@@ -43,6 +41,8 @@ All in your local storage, so don't add too much projects :)
 #### How to remove the project
 In the top-right corner, click your project name, a project list will be show up and the first option is removing
 
-
 ## License
 MIT
+
+## Support
+<a href="https://www.buymeacoffee.com/wwayne" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
