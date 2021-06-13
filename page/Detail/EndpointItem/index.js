@@ -204,7 +204,7 @@ export default class EndpointItem extends Component {
           </div>
 
           {/* Url */}
-          <div className="flex items-center">
+          <div className="flex items-center -mb-2">
             <div className="font-medium mr-2 methodSelect">
               <MethodSelect
                 method={endpoint.method}

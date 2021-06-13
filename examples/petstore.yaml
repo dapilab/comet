@@ -14,13 +14,30 @@ paths:
       tags:
         - pets
       parameters:
-        - name: limit
+        - name: Content-type
+          in: header
+          schema:
+            type: string
+            example: application/json
+        - name: Accept
+          in: header
+          schema:
+            type: string
+            example: application/json
+        - name: page
           in: query
-          description: How many items to return at one time (max 100)
+          description: Pagination for the query
           required: false
           schema:
-            type: integer
-            format: int32
+            type: object
+            properties:
+              offset:
+                type: integer
+                default: 0
+              limit:
+                type: integer
+                max: 100
+                min: 0
       responses:
         '200':
           description: A paged array of pets
@@ -46,16 +63,26 @@ paths:
         - pets
       responses:
         '201':
-          description: Null response
-        default:
-          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        '400':
+          description: Parameter invalid
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        '502':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
   /pets/{petId}:
     get:
-      summary: Info for a specific pet
+      summary: Find a specific pet
       operationId: showPetById
       tags:
         - pets
@@ -79,6 +106,46 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+    patch:
+      summary: Update a pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Pet"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Remove a pet
+      operationId: showPetById
+      tags:
+        - pets
+      parameters:
+        - name: petId
+          in: path
+          required: true
+          description: The id of the pet to retrieve
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Removed success
 components:
   schemas:
     Pet:
