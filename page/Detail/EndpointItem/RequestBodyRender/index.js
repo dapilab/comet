@@ -18,7 +18,7 @@ export default class RequestBodyRender extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentMode: "model"
+      currentMode: "schema"
     };
   }
 
@@ -35,7 +35,7 @@ export default class RequestBodyRender extends Component {
     const contentType = requestBody.content && Object.keys(requestBody.content)[0];
     let schemElem;
     if (contentType) {
-      if (currentMode === "model") {
+      if (currentMode === "schema") {
         schemElem = renderModelAttribute(null, requestBody.content[contentType].schema, { alwaysShowCurrent: true });
       }
       if (currentMode === "example") {
@@ -59,22 +59,22 @@ export default class RequestBodyRender extends Component {
             }
 
             {/* Select example or schema */}
-            <div className="flex items-center">
+            <div className="flex items-center text-xs py-2">
               <p
-                className={classnames("transition-20 cursor-pointer hover:text-black text-sm pr-2", {
-                  "grey-light": currentMode !== "model",
-                  "text-black": currentMode === "model"
+                className={classnames("transition-20 cursor-pointer mr-2 py-1 px-3 rounded leading-none", {
+                  "grey-light hover:opacity-75": currentMode !== "schema",
+                  schemaActive: currentMode === "schema"
                 })}
-                onClick={this.changeMode.bind(this, "model")}>
-                schema
+                onClick={this.changeMode.bind(this, "schema")}>
+                Schema
               </p>
               <p
-                className={classnames("transition-20 cursor-pointer hover:text-black text-sm", {
-                  "grey-light": currentMode !== "example",
-                  "text-black": currentMode === "example"
+                className={classnames("transition-20 cursor-pointer py-1 px-3 rounded leading-none", {
+                  "grey-light hover:opacity-75": currentMode !== "example",
+                  exampleActive: currentMode === "example"
                 })}
                 onClick={this.changeMode.bind(this, "example")}>
-                example
+                Example
               </p>
             </div>
 

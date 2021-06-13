@@ -106,6 +106,16 @@
     color: $blue-purple;
   }
 
+  .exampleActive {
+    color: $orange;
+    background: transparentize($orange, 0.85);
+  }
+
+  .schemaActive {
+    color: $blue-purple;
+    background: transparentize($blue-purple, 0.85);
+  }
+
   /**
    * Right section
    */

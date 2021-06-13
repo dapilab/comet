@@ -99,8 +99,8 @@ export default class Detail extends Component {
             <div
               key={endpointId}
               className={classnames({
-                "py-48": idx !== 0,
-                "pb-48": idx === 0
+                "py-32": idx !== 0,
+                "pb-32": idx === 0
               })}>
               <EndpointItem
                 idx={idx}
