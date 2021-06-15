@@ -15,7 +15,12 @@
     }
   }
 
-  .btnGroup {
+  .bottomBtns {
     width: 80vw;
+    .buymeacoffeeBtn {
+      img {
+        height: 2.1rem;
+      }
+    }
   }
 }

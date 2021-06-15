@@ -59,17 +59,29 @@ export default class FullSchema extends Component {
             className="codeMirror"
             ref={this.codemirrorRef} />
         }
-        <div className="flex justify-end btnGroup mt-5">
-          <button
-            className="btn primary w-32 text-sm py-2"
-            onClick={::this.onSave}>
-            {isSaving && "Saving..." || "Save" }
-          </button>
-          <button
-            className="btn secondary-border w-32 text-sm py-2 ml-5"
-            onClick={toggleFullSchmea}>
-            Cancel
-          </button>
+        <div className="flex justify-between mt-5 bottomBtns">
+          <a
+            href="https://www.buymeacoffee.com/wwayne"
+            target="_blank"
+            className="buymeacoffeeBtn"
+            rel="noopener noreferrer">
+            <img
+              alt="buymeacoffee"
+              src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=&slug=wwayne&button_colour=568ef2&font_colour=000000&font_family=Cookie&outline_colour=000000&coffee_colour=ffffff" />
+          </a>
+
+          <div className="flex items-center">
+            <button
+              className="btn primary w-32 text-sm py-2"
+              onClick={::this.onSave}>
+              {isSaving && "Saving..." || "Save" }
+            </button>
+            <button
+              className="btn secondary-border w-32 text-sm py-2 ml-5"
+              onClick={toggleFullSchmea}>
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     );
