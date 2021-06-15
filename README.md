@@ -1,5 +1,8 @@
 ## Comet
+
 OpenAPI Editor For Nerds
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/b5072d5e-eeab-4391-93cd-4590bed35570/deploy-status)](https://app.netlify.com/sites/nostalgic-swanson-7dc1f9/deploys)
 
 <img width="1741" alt="截屏2021-05-21 下午4 56 53" src="https://user-images.githubusercontent.com/5305874/119372559-0825db80-bcea-11eb-9237-4b23bf01349e.png">
 
@@ -43,6 +46,3 @@ In the top-right corner, click your project name, a project list will be show up
 
 ## License
 MIT
-
-## Support
-<a href="https://www.buymeacoffee.com/wwayne" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
