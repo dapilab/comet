@@ -43,7 +43,7 @@ All in your local storage, so don't add too much projects :)
 #### How to remove the project
 In the top-right corner, click your project name, a project list will be show up and the first option is removing
 
-## Support
+## Support the project
 <a href="https://www.buymeacoffee.com/wwayne" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
 
 ## License
