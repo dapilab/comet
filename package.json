@@ -6,12 +6,18 @@
     "lint:fix"
   ],
   "scripts": {
-    "lint": "make lint",
-    "lint:fix": "make lint-fix",
-    "start": "make dev",
-    "test": "make test",
-    "prebuild": "rm -rf dist",
-    "build": "webpack --config ./webpack/production.js --progress --bail"
+    "prelin": "echo Linting...",
+    "lint": "npx lint",
+    "prelint:fix": "echo Fix linting...",
+    "lint:fix": "npx eslint --fix .",
+	"prestart": "echo Starting dev server...",
+    "start": "cross-env NODE_ENV=development && npx webpack-dev-server --config ./webpack/development.js --progress",
+	"pretest":"echo Testing...",
+    "test": "npx jest",
+	"preremovedist":"echo Deleting dist folder...",
+    "removedist": "rimraf dist",
+	"prebuild":"echo Buidling...",
+    "build": "npm run removedist && cross-env NODE_ENV=production && npx webpack --config ./webpack/production.js --progress --bail"
   },
   "engines": {
     "node": ">=12.13.1"
@@ -47,6 +53,7 @@
     "babel-preset-stage-0": "^6.24.1",
     "classnames": "^2.3.1",
     "codemirror": "^5.61.0",
+    "cross-env": "^7.0.3",
     "css-loader": "^3.2.0",
     "dompurify": "^2.2.8",
     "file-loader": "^4.2.0",
@@ -68,6 +75,7 @@
     "react-draggable": "^4.4.3",
     "react-hot-loader": "^4.12.15",
     "react-tooltip": "^4.2.19",
+    "rmraf": "^1.0.3",
     "sass-loader": "^8.0.0",
     "showdown": "^1.9.1",
     "style-loader": "^1.0.0",
