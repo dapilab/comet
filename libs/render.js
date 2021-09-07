@@ -511,7 +511,8 @@ const schemaToJS = (schema) => {
   }
 };
 
-export const toCurl = (endpoint) => {
+export const toCurl = (endpoint, { host } = {}) => {
+  host = host || "";
   const { parameters, requestBody, method } = endpoint;
   let { url } = endpoint;
 
@@ -522,7 +523,7 @@ export const toCurl = (endpoint) => {
     parameters.filter((param) => param.in === "header").forEach((param) => {
       const key = param.name;
       const value = param.example || param.schema.default || param.schema.example || param.schema.type;
-      curlHeader += `-H "${key}=${value}" `;
+      curlHeader += `-H "${key}: ${value}" `;
     });
 
     parameters.filter((param) => param.in === "path").forEach((param) => {
@@ -536,8 +537,8 @@ export const toCurl = (endpoint) => {
       acc[curr.name] = schemaToJS(curr.schema);
       return acc;
     }, {});
-    curlQuery = qs.stringify(curlQuery);
-    if (curlQuery) url += `?${curlQuery}`;
+    curlQuery = qs.stringify(curlQuery, { encode: false });
+    if (curlQuery) url += `\?${curlQuery}`;
   }
 
   const curlMethod = method !== "get"
@@ -552,7 +553,7 @@ export const toCurl = (endpoint) => {
         // Check if content-type exist in the header
         const contentTypeRegExp = new RegExp("content-type:\s*application/json", "i");
         if (!contentTypeRegExp.test(curlHeader)) {
-          curlHeader += "-H \"Content-Type=application/json\" ";
+          curlHeader += "-H \"Content-Type: application/json\" ";
         }
 
         curlRequest = schemaToJS(requestBody.content[requestSchemaName].schema);
@@ -577,5 +578,5 @@ export const toCurl = (endpoint) => {
     }
   }
 
-  return `curl${curlMethod} ${curlHeader}${curlRequest}${url}`;
+  return `curl${curlMethod} ${curlHeader}${curlRequest}${host}${url}`;
 };
