@@ -21,8 +21,7 @@ export default class EndpointItem extends Component {
     nextEndpointId: PropTypes.string,
     idx: PropTypes.number,
     detailId: PropTypes.string,
-    headerId: PropTypes.string,
-    rightClass: PropTypes.string
+    headerId: PropTypes.string
   }
 
   constructor(props) {
@@ -152,7 +151,7 @@ export default class EndpointItem extends Component {
   }
 
   render() {
-    const { endpointId, idx, rightClass } = this.props;
+    const { endpointId, idx } = this.props;
     const { isAPIExpanded, isCopied } = this.state;
 
     const endpoint = endpointStore.observerTrigger && endpointStore.data[endpointId];
@@ -160,7 +159,7 @@ export default class EndpointItem extends Component {
     return (
       <div
         id={getEndpointBlockId(endpointId)}
-        className={classnames("EndpointItem flex justify-end", { first: idx === 0 })}>
+        className={classnames("EndpointItem flex justify-end relative", { first: idx === 0 })}>
         {/* Left part */}
         <div className="leftSection">
           <RenderEndpoint
@@ -178,7 +177,7 @@ export default class EndpointItem extends Component {
         </div>
 
         {/* Right part */}
-        <div className={classnames("rightSection", rightClass)}>
+        <div className="rightSection sticky top-0 self-start">
           {/* Open API */}
           {/* Open API: header */}
           <div className="rounded-t-lg flex items-center justify-between py-2 px-5 openAPIHeader">

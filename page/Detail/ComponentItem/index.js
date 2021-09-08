@@ -21,8 +21,7 @@ const converter = new showdown.Converter({ openLinksInNewWindow: true });
 @observer
 export default class ComponentItem extends Component {
   static propTypes = {
-    componentId: PropTypes.string,
-    rightClass: PropTypes.string
+    componentId: PropTypes.string
   }
 
   constructor(props) {
@@ -62,7 +61,7 @@ export default class ComponentItem extends Component {
   }
 
   render() {
-    const { componentId, rightClass } = this.props;
+    const { componentId } = this.props;
     const { isAPIExpanded } = this.state;
 
     const component = componentStore.observerTrigger && componentStore.data[componentId];
@@ -121,7 +120,7 @@ export default class ComponentItem extends Component {
         </div>
 
         {/* Right part */}
-        <div className={classnames("rightSection", rightClass)}>
+        <div className="rightSection sticky top-0 self-start">
           {/* Open API */}
           <Fragment>
             {/* Open API: header */}
