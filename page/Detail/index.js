@@ -34,7 +34,6 @@ export default class Detail extends Component {
   }
 
   componentDidMount() {
-    this.calcuRightInfoWidth();
     window.addEventListener("beforeunload", this.saveWidthIntoStorage);
   }
 

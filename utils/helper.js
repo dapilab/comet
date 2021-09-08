@@ -8,10 +8,10 @@ export const getComponentBlockId = (componentId) => `component-block-${component
 
 // Reset active state of left menu
 export const resetListItemActiveState = () => {
-  document.querySelectorAll(".List .endpointItem").forEach((item) => {
+  document.querySelectorAll(".ProjectAPIList .endpointItem").forEach((item) => {
     item.classList.remove("active");
   });
-  document.querySelectorAll(".List .componentItem").forEach((item) => {
+  document.querySelectorAll(".ProjectAPIList .componentItem").forEach((item) => {
     item.classList.remove("active");
   });
 };

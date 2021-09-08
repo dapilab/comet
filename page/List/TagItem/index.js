@@ -122,7 +122,7 @@ export default class ListTagItem extends Component {
           className="tagHeader flex items-center justify-between relative">
           {/* Tag name */}
           <Text
-            className="title mr-2 text-sm font-bold"
+            className="Text cursor-text mr-2 leading-normal font-bold"
             placeholder="Tag name..."
             content={isDefaultTag && "Default" || tag.name}
             onSave={::this.changeTagName}

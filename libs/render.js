@@ -212,20 +212,20 @@ export const renderModelAttribute = (
         isHidden: schema.isHidden
       })}>
       {/* Name */}
-      <div className="flex items-center mb-1 nameWrapper font-mono">
+      <div className="flex items-center mb-1 nameWrapper">
         {name &&
-          <p className="mr-1 leading-none attributeName">
+          <p className="mr-1 text-sm leading-none attributeName grey-dark font-mont">
             {name}
           </p>
         }
-        <p className="grey leading-none">
+        <p className="grey-light text-sm leading-none">
           <span>{type}</span>
           {type === "array" && schema.items && schema.items.type &&
             <span>[{schema.items.type}]</span>
           }
         </p>
         {required === true &&
-          <p className="grey leading-none">
+          <p className="grey-light text-sm leading-none">
             <span className="inline-block mr-1">,</span>
             <span>required</span>
           </p>
@@ -233,7 +233,7 @@ export const renderModelAttribute = (
       </div>
 
       {/* Description */}
-      <p className="text-sm grey-light">{descriptionElem}</p>
+      <p className="text-xs grey mt-1">{descriptionElem}</p>
 
       {name &&
         <div
@@ -409,7 +409,13 @@ const renderExampleAttribute = (key, value, required = false) => {
           {key && <span className="exampleKey">{key}</span>}
           {key && required && <span className="blue-purple font-bold">*</span>}
           {key && <span className="inline-block mr-1 exampleKey">:</span>}
-          {genValueElement(value.default || value.example || value.type, value.type, { withColor: false })}
+          {
+            genValueElement(
+              value.default || value.example || value.type || (value.enum && value.enum[0]),
+              value.type,
+              { withColor: false }
+            )
+          }
         </div>
       );
     }

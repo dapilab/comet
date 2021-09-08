@@ -1,10 +1,7 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import { observer } from "mobx-react";
-import { DraggableCore } from "react-draggable";
 import classnames from "classnames";
-import showdown from "showdown";
-import DOMPurify from "dompurify";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 
 import { endpointStore, componentStore } from "stores";
@@ -12,17 +9,10 @@ import { endpointStore, componentStore } from "stores";
 import { getEndpointBlockId, activeEndpointItem } from "utils/helper";
 import { toCurl } from "libs/render";
 
-import Text from "components/Text";
-import SubMenu from "components/SubMenu";
 import CodeMirror from "../CodeMirror";
-import MethodSelect from "./MethodSelect/index";
-import ParameterRender from "./ParameterRender";
-import RequestBodyRender from "./RequestBodyRender";
-import ResponsesRender from "./ResponsesRender";
+import RenderEndpoint from "../RenderEndpoint";
 
 require("./index.scss");
-
-const converter = new showdown.Converter({ openLinksInNewWindow: true });
 
 @observer
 export default class EndpointItem extends Component {
@@ -32,7 +22,6 @@ export default class EndpointItem extends Component {
     idx: PropTypes.number,
     detailId: PropTypes.string,
     headerId: PropTypes.string,
-    handleWidthDrag: PropTypes.func,
     rightClass: PropTypes.string
   }
 
@@ -109,6 +98,9 @@ export default class EndpointItem extends Component {
     }
   }
 
+  /**
+   * Left section
+   */
   updateEndpoint(type, value) {
     const { endpointId } = this.props;
     endpointStore.updateById(endpointId, { [type]: value });
@@ -160,78 +152,33 @@ export default class EndpointItem extends Component {
   }
 
   render() {
-    const { endpointId, idx, handleWidthDrag, rightClass } = this.props;
+    const { endpointId, idx, rightClass } = this.props;
     const { isAPIExpanded, isCopied } = this.state;
 
     const endpoint = endpointStore.observerTrigger && endpointStore.data[endpointId];
-    const myDescription = endpoint.description && converter.makeHtml(DOMPurify.sanitize(endpoint.description));
     const curlContent = toCurl(endpoint);
     return (
       <div
         id={getEndpointBlockId(endpointId)}
-        className={classnames("EndpointItem ml-5 flex justify-end", { first: idx === 0 })}>
+        className={classnames("EndpointItem flex justify-end", { first: idx === 0 })}>
         {/* Left part */}
-        <div className="endpointDetailLeft">
-          <div className="relative pr-8 mb-2">
-            {/* Name */}
-            <Text
-              content={endpoint.name}
-              placeholder="Name..."
-              onSave={this.updateEndpoint.bind(this, "name")}
-              className="text-2xl leading-tight"
-              enterForSave
-              trim />
-            {/* Description */}
-            {myDescription &&
-              <div
-                className="endpointDesc text-sm grey-light leading-normal cursor-text mt-1"
-                dangerouslySetInnerHTML={{ __html: myDescription }} />
-            }
-            <SubMenu
-              className="absolute top-0 right-0"
-              options={[{
-                value: "duplicate",
-                label: "Duplicate"
-              }, {
-                value: "remove",
-                label: "Remove"
-              }]}
-              onChange={::this.moreAction}
-              align="right">
-              <i
-                className="iconfont icon-elipsis font-bold grey hover:blue-purple cursor-pointer opacity-0 endpointLeftHoverShow transition-20 block" />
-            </SubMenu>
-          </div>
-
-          {/* Url */}
-          <div className="flex items-center -mb-2">
-            <div className="font-medium mr-2 methodSelect">
-              <MethodSelect
-                method={endpoint.method}
-                onChange={::this.changeMethod} />
-            </div>
-
-            <Text
-              className="tracking-wide leading-tight"
-              content={endpoint.url}
-              placeholder="URL..."
-              onSave={this.updateEndpoint.bind(this, "url")} />
-          </div>
-          {/* Parameter and response */}
-          <ParameterRender parameters={endpoint.parameters || undefined} />
-          <RequestBodyRender requestBody={endpoint.requestBody || undefined} />
-          <ResponsesRender responses={endpoint.responses || undefined} />
+        <div className="leftSection">
+          <RenderEndpoint
+            endpoint={endpoint}
+            moreOpts={[{
+              value: "duplicate",
+              label: "Deuplicate"
+            }, {
+              value: "remove",
+              label: "Remove"
+            }]}
+            updateEndpoint={::this.updateEndpoint}
+            moreAction={::this.moreAction}
+            changeMethod={::this.changeMethod} />
         </div>
 
-        {/* Center divider */}
-        <DraggableCore axis="x" onDrag={handleWidthDrag}>
-          <div className="self-stretch cursor-col-resize detailWidthDragger" />
-        </DraggableCore>
-
         {/* Right part */}
-        <div
-          className={classnames("rightSection", rightClass)}
-          style={{ flex: "0 0 30vw" }}>
+        <div className={classnames("rightSection", rightClass)}>
           {/* Open API */}
           {/* Open API: header */}
           <div className="rounded-t-lg flex items-center justify-between py-2 px-5 openAPIHeader">
@@ -272,7 +219,7 @@ export default class EndpointItem extends Component {
                     <p className="leading-none mr-1">Copy</p>
                     <i className={classnames("iconfont", {
                       "icon-copy": !isCopied,
-                      "icon-seleted green": isCopied
+                      "icon-seleted green font-bold": isCopied
                     })} />
                   </div>
                 </CopyToClipboard>

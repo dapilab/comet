@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from "react";
 import { observer } from "mobx-react";
-import { DraggableCore } from "react-draggable";
 
 import { appStore } from "stores";
 
@@ -151,7 +150,9 @@ export default class Application extends Component {
           isExample={isExample} />
 
         {/* Main */}
-        <div id={this.mainId} className="flex wrapper">
+        <div
+          id={this.mainId}
+          className="ProjectAPI h-full flex wrapper">
           {appStore.isLoaded &&
             <Fragment>
               {/* Left list */}
@@ -159,10 +160,6 @@ export default class Application extends Component {
                 selectedTagIds={selectedTagIds}
                 selectedEndpointIds={selectedEndpointIds}
                 style={{ flex: `0 0 ${listWidth}rem` }} />
-
-              <DraggableCore axis="x" onDrag={::this.handleWidthDrag}>
-                <div className="self-stretch cursor-col-resize w-8 listWidthDragger" />
-              </DraggableCore>
 
               {/* Right detail content */}
               <Detail

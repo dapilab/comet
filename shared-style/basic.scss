@@ -5,11 +5,12 @@
 @import './components';
 @import './variable';
 @import './iconfont';
+@import './font';
 @import './tailwindExtend';
 
 html {
-  color: #000;
-  font: 16px/1.625 -apple-system, 'BlinkMacSystemFont', 'Helvetica Neue', 'Helvetica', 'Hiragino Sans GB', Simsun, Arial, sans-self;
+  color: #2a2f45;
+  font: 16px/1.625 -apple-system,BlinkMacSystemFont,Roboto,Hiragino Sans GB,Simsun,Arial,sans-self;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;

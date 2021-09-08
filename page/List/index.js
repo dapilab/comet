@@ -16,12 +16,7 @@ require("./index.scss");
 export default class List extends Component {
   static propTypes = {
     selectedEndpointIds: PropTypes.array,
-    selectedTagIds: PropTypes.array,
-    style: PropTypes.object
-  };
-
-  static defaultProps = {
-    style: {}
+    selectedTagIds: PropTypes.array
   };
 
   constructor(props) {
@@ -150,136 +145,136 @@ export default class List extends Component {
   }
 
   render() {
-    const { selectedTagIds, selectedEndpointIds, style } = this.props;
+    const { selectedTagIds, selectedEndpointIds } = this.props;
     const { isAddingTag, isAddingComponent, isAddingDefaultAPI } = this.state;
     return (
-      <div
-        className="List h-full overflow-y-auto pb-10"
-        style={style}>
-        {/* API header */}
-        <div className="apiHeader flex items-center justify-between relative ">
-          <p className="mr-2 cursor-default leading-none text-xl tracking-wider font-bold">
-            API
-          </p>
-          <SubMenu
-            className="flex align-center"
-            options={[
-              { value: "tag", label: "Add New Tag" },
-              { value: "api", label: "Add New API" }
-            ]}
-            onChange={::this.onChangeAddAPI}
-            align="right">
-            <i className="iconfont icon-add-select text-xl font-bold grey hover:blue-purple leading-none cursor-pointer opacity-0 transition-20 headerHoverShow" />
-          </SubMenu>
-        </div>
-
-        {/* Adding tag */}
-        {isAddingTag &&
-          <div className="flex mt-3 mb-4 showUpFromLeftToRight items-center">
-            <input
-              placeholder="Tag name..."
-              className="input bottomBorder flex-1 mr-5 text-sm"
-              onKeyUp={::this.onKeyUpNewTag}
-              ref={this.myRefs.addTagInput} />
-            <div className="flex items-center">
-              <button
-                className="btn primary text-center py-1 text-xs self-start rounded-full w-16 mr-1"
-                onClick={::this.saveNewTag}>
-                Save
-              </button>
-              <button
-                className="btn secondary text-center py-1 text-xs self-start rounded-full pl-2"
-                onClick={::this.toggleIsAddingTag}>
-                Cancel
-              </button>
-            </div>
+      <div className="ProjectAPIList h-full sticky top-0">
+        <div className="ProjectAPIListInner h-full overflow-y-auto pb-10 pr-3">
+          {/* API header */}
+          <div className="apiHeader flex items-center justify-between relative ">
+            <p className="mr-2 cursor-default leading-none font-bold font-sf text-xl">
+              API
+            </p>
+            <SubMenu
+              className="flex align-center"
+              options={[
+                { value: "tag", label: "Add New Tag" },
+                { value: "api", label: "Add New API" }
+              ]}
+              onChange={::this.onChangeAddAPI}
+              align="right">
+              <i className="iconfont icon-add-select text-xl font-bold grey hover:blue-purple leading-none cursor-pointer opacity-0 transition-20 headerHoverShow" />
+            </SubMenu>
           </div>
-        }
 
-        {/* Tag list with apis */}
-        {tagStore.observerTrigger && tagStore.getList()
-          .filter((tagId) => {
-            if (isAddingDefaultAPI) return true;
-            if (selectedTagIds) {
-              return selectedTagIds.includes(tagId);
-            }
-            if (tagId !== tagStore.getDefaultTagId()) return true;
+          {/* Adding tag */}
+          {isAddingTag &&
+            <div className="flex mt-3 mb-4 showUpFromLeftToRight items-center">
+              <input
+                placeholder="Tag name..."
+                className="input bottomBorder flex-1 mr-5 text-sm"
+                onKeyUp={::this.onKeyUpNewTag}
+                ref={this.myRefs.addTagInput} />
+              <div className="flex items-center">
+                <button
+                  className="btn primary text-center py-1 text-xs self-start rounded-full w-16 mr-1"
+                  onClick={::this.saveNewTag}>
+                  Save
+                </button>
+                <button
+                  className="btn secondary text-center py-1 text-xs self-start rounded-full pl-2"
+                  onClick={::this.toggleIsAddingTag}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          }
 
-            // If Default tag is empty, hide it
-            if (!endpointStore.tags[tagId] || endpointStore.tags[tagId].data.length === 0) {
-              return false;
-            }
+          {/* Tag list with apis */}
+          {tagStore.observerTrigger && tagStore.getList()
+            .filter((tagId) => {
+              if (isAddingDefaultAPI) return true;
+              if (selectedTagIds) {
+                return selectedTagIds.includes(tagId);
+              }
+              if (tagId !== tagStore.getDefaultTagId()) return true;
 
-            return true;
-          })
-          .map((tagId, idx) => {
-            const isDefaultTag = tagId === tagStore.getDefaultTagId();
-            return (
-              (
+              // If Default tag is empty, hide it
+              if (!endpointStore.tags[tagId] || endpointStore.tags[tagId].data.length === 0) {
+                return false;
+              }
+
+              return true;
+            })
+            .map((tagId, idx) => {
+              const isDefaultTag = tagId === tagStore.getDefaultTagId();
+              return (
+                (
+                  <div
+                    key={tagId}
+                    className={classnames({ "mt-8": idx !== 0 })}>
+                    <TagItem
+                      tagId={tagId}
+                      selectedEndpointIds={selectedEndpointIds}
+                      ref={isDefaultTag && this.myRefs.defaultTag || null} />
+                  </div>
+                )
+              );
+            })
+          }
+
+          {/* Component header */}
+          <div className="apiHeader flex items-center justify-between mt-10 relative pl-7 -ml-7">
+            <label className="mr-2 cursor-default leading-none font-bold font-sf text-xl">
+              Components
+            </label>
+            <i
+              className="headerIcon iconfont icon-add-select leading-tight text-xl grey z-10 cursor-pointer opacity-0 transition-20 headerHoverShow"
+              onClick={::this.toggleAddNewComponent} />
+          </div>
+
+          {/* Adding component  */}
+          {isAddingComponent &&
+            <div className="flex mb-4 items-center justify-between showUpFromLeftToRight">
+              <input
+                placeholder="Name..."
+                className="input bottomBorder flex-1 mr-5 text-sm"
+                onKeyUp={::this.onKeyUpNewComponent}
+                ref={this.myRefs.addComponentInput} />
+              <div className="flex items-center">
+                <button
+                  className="btn primary text-xs text-center py-1 text-xs self-start rounded-full w-16 mr-1"
+                  onClick={::this.saveNewComponent}>
+                  Save
+                </button>
+                <button
+                  className="btn secondary text-xs text-center py-1 text-xs self-start rounded-full pl-2"
+                  onClick={::this.toggleAddNewComponent}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          }
+
+          {/* Component list */}
+          {componentStore.observerTrigger &&
+            componentStore.list.map((componentId, idx) => {
+              const component = componentStore.data[componentId];
+              return (
                 <div
-                  key={tagId}
-                  className={classnames({ "mt-8": idx !== 0 })}>
-                  <TagItem
-                    tagId={tagId}
-                    selectedEndpointIds={selectedEndpointIds}
-                    ref={isDefaultTag && this.myRefs.defaultTag || null} />
+                  key={componentId}
+                  id={getListComponentId(componentId)}
+                  className={classnames("flex items-center componentItem leading-none text-sm", {
+                    "py-2": idx !== 0,
+                    "pb-2": idx === 0
+                  })}
+                  onClick={jumpToComponent.bind(this, componentId)}>
+                  <p className="leading-tight">{component.name}</p>
                 </div>
-              )
-            );
-          })
-        }
-
-        {/* Component header */}
-        <div className="apiHeader flex items-center justify-between mt-10 relative pl-7 -ml-7">
-          <label className="mr-2 cursor-default leading-snug text-xl tracking-wider font-bold">
-            Components
-          </label>
-          <i
-            className="headerIcon iconfont icon-add-select leading-tight text-xl grey z-10 cursor-pointer opacity-0 transition-20 headerHoverShow"
-            onClick={::this.toggleAddNewComponent} />
+              );
+            })
+          }
         </div>
-
-        {/* Adding component  */}
-        {isAddingComponent &&
-          <div className="flex mb-4 items-center justify-between showUpFromLeftToRight">
-            <input
-              placeholder="Name..."
-              className="input bottomBorder flex-1 mr-5 text-sm"
-              onKeyUp={::this.onKeyUpNewComponent}
-              ref={this.myRefs.addComponentInput} />
-            <div className="flex items-center">
-              <button
-                className="btn primary text-xs text-center py-1 text-xs self-start rounded-full w-16 mr-1"
-                onClick={::this.saveNewComponent}>
-                Save
-              </button>
-              <button
-                className="btn secondary text-xs text-center py-1 text-xs self-start rounded-full pl-2"
-                onClick={::this.toggleAddNewComponent}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        }
-
-        {/* Component list */}
-        {componentStore.observerTrigger && componentStore.list.map((componentId, idx) => {
-          const component = componentStore.data[componentId];
-          return (
-            <div
-              key={componentId}
-              id={getListComponentId(componentId)}
-              className={classnames("flex items-center componentItem leading-none text-sm", {
-                "py-2": idx !== 0,
-                "pb-2": idx === 0
-              })}
-              onClick={jumpToComponent.bind(this, componentId)}>
-              <p className="leading-tight">{component.name}</p>
-            </div>
-          );
-        })
-        }
-
       </div>
     );
   }

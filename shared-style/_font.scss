@@ -1,0 +1,19 @@
+$assets: '../public/fonts';
+
+@font-face {
+  font-family: 'sfrounded';
+  src: url('#{$assets}/SFRounded.woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'sfrounded';
+  src: url('#{$assets}/SFRounded-bold.woff');
+  font-weight: bold;
+  font-style: normal;
+}
+
+.font-mont {
+  font-family: "Montserrat"
+}

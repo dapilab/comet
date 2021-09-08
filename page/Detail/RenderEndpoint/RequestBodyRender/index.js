@@ -45,18 +45,12 @@ export default class RequestBodyRender extends Component {
     return (
       <div className="RequestBodyRender">
         {schemElem &&
-          <div className="mt-5">
+          <div className="mb-5">
             {/* Header */}
-            <div className="gradientBorder mb-2">
-              <p className="text-sm relative leading-none">Body</p>
+            <div className="pt-2 pb-1 flex items-center sectionTitle">
+              {/* Title */}
+              <p className="text-sm font-medium mr-3">Body</p>
             </div>
-
-            {/* Content-type */}
-            {contentType &&
-              <p className="leading-tight text-sm grey-light py-2">
-                {contentType}
-              </p>
-            }
 
             {/* Select example or schema */}
             <div className="flex items-center text-xs py-2">
@@ -78,8 +72,15 @@ export default class RequestBodyRender extends Component {
               </p>
             </div>
 
+            {/* Content-type */}
+            {contentType &&
+              <p className="leading-tight text-sm grey-light pb-1">
+                {contentType}
+              </p>
+            }
+
             {/* Content */}
-            <div className="text-sm grey -mt-1">
+            <div className="text-sm grey-dark">
               {schemElem}
             </div>
           </div>

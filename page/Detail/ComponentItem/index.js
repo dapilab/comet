@@ -4,7 +4,6 @@ import { observer } from "mobx-react";
 import showdown from "showdown";
 import DOMPurify from "dompurify";
 import classnames from "classnames";
-import { DraggableCore } from "react-draggable";
 
 import { componentStore } from "stores";
 
@@ -23,7 +22,6 @@ const converter = new showdown.Converter({ openLinksInNewWindow: true });
 export default class ComponentItem extends Component {
   static propTypes = {
     componentId: PropTypes.string,
-    handleWidthDrag: PropTypes.func,
     rightClass: PropTypes.string
   }
 
@@ -64,7 +62,7 @@ export default class ComponentItem extends Component {
   }
 
   render() {
-    const { componentId, handleWidthDrag, rightClass } = this.props;
+    const { componentId, rightClass } = this.props;
     const { isAPIExpanded } = this.state;
 
     const component = componentStore.observerTrigger && componentStore.data[componentId];
@@ -81,9 +79,9 @@ export default class ComponentItem extends Component {
     return (
       <div
         id={getComponentBlockId(componentId)}
-        className="ComponentItem ml-5 flex justify-end">
+        className="ComponentItem flex justify-end">
         {/* Left schema */}
-        <div className="componentDetailLeft">
+        <div className="leftSection">
           <div className="relative pr-8">
             {/* Name */}
             <div className="flex items-center">
@@ -122,15 +120,8 @@ export default class ComponentItem extends Component {
           </div>
         </div>
 
-        {/* Center divider */}
-        <DraggableCore axis="x" onDrag={handleWidthDrag}>
-          <div className="self-stretch cursor-col-resize detailWidthDragger" />
-        </DraggableCore>
-
         {/* Right part */}
-        <div
-          className={classnames("rightSection", rightClass)}
-          style={{ flex: "0 0 30vw" }}>
+        <div className={classnames("rightSection", rightClass)}>
           {/* Open API */}
           <Fragment>
             {/* Open API: header */}

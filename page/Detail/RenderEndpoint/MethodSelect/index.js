@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 
@@ -11,12 +11,14 @@ export default class MethodSelect extends Component {
     className: PropTypes.string,
     method: PropTypes.oneOf(["get", "post", "patch", "delete", "put", "head"]),
     onChange: PropTypes.func,
-    size: PropTypes.oneOf(["base", "small"])
+    size: PropTypes.oneOf(["base", "small"]),
+    isEditable: PropTypes.bool
   };
 
   static defaultProps = {
     method: "get",
-    size: "base"
+    size: "base",
+    isEditable: true
   }
 
   constructor(props) {
@@ -27,6 +29,13 @@ export default class MethodSelect extends Component {
       methodColorClass: methodToClassName[props.method]
     };
     this.close = this.close.bind(this);
+  }
+
+  static getDerivedStateFromProps(props) {
+    return {
+      method: props.method,
+      methodColorClass: methodToClassName[props.method]
+    };
   }
 
   onClick(method, e) {
@@ -55,7 +64,9 @@ export default class MethodSelect extends Component {
   }
 
   toggleOpen() {
+    const { isEditable } = this.props;
     const { isOpen } = this.state;
+    if (!isEditable) return;
     this.setState({ isOpen: !isOpen }, () => {
       const newIsOpen = !isOpen;
       if (newIsOpen) {
@@ -73,7 +84,7 @@ export default class MethodSelect extends Component {
   }
 
   render() {
-    const { className, size } = this.props;
+    const { className, size, isEditable } = this.props;
     const { isOpen, method, methodColorClass } = this.state;
 
     const methodItems = this.genMethodOpts();
@@ -81,30 +92,38 @@ export default class MethodSelect extends Component {
     return (
       <div
         className={classnames(
-          "MethodSelect flex item-center cursor-pointer relative no-shadow relative",
-          className
+          "MethodSelect black flex item-center relative no-shadow relative",
+          className,
+          {
+            "cursor-pointer": isEditable
+          }
         )}
         onClick={::this.toggleOpen}>
-        <label className={classnames("cursor-pointer font-bold", methodColorClass, {
-          "text-sm": size === "small"
-        })}>
+        <label
+          className={classnames("font-bold", methodColorClass, {
+            "cursor-pointer": isEditable
+          })}>
           {methodLabel}
         </label>
-        <div className="arrowIcon flex items-center justify-center absolute left-0 text-lg top-0 bottom-0">
-          <i className={classnames("iconfont icon-arrow-down font-bold cursor-pointer",
-            methodColorClass,
-            {
-              open: isOpen
-            })} />
-        </div>
-        <div
-          className={classnames(
-            "options absolute left-0 rounded mt-1 bg-white z-10 py-2 fadeUpHide text-sm",
-            { fadeUpShow: isOpen }
-          )}
-          onClick={(e) => e.stopPropagation()}>
-          {methodItems}
-        </div>
+        {isEditable &&
+          <Fragment>
+            <i
+              className={classnames("iconfont iconarrow-down font-bold cursor-pointer arrowIcon absolute left-0", methodColorClass,
+                {
+                  "text-sm": size === "small",
+                  smallMargin: size === "small",
+                  open: isOpen
+                })} />
+            <div
+              className={classnames(
+                "options absolute left-0 rounded mt-1 bg-white z-10 py-2 fadeUpHide text-sm",
+                { fadeUpShow: isOpen }
+              )}
+              onClick={(e) => e.stopPropagation()}>
+              {methodItems}
+            </div>
+          </Fragment>
+        }
       </div>
     );
   }

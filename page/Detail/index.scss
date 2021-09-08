@@ -4,35 +4,5 @@
 .Detail {
   .attributeBorderBottom:not(:last-of-type) {
     border-bottom: 1px solid $grey-lightest;
-    margin-bottom: 0.5rem;
-  }
-
-  .EndpointItem, .ComponentItem {
-    max-width: 1280px;
-    margin: auto;
-  }
-
-  .endpointDetailLeft, .componentDetailLeft {
-    max-width: 550px;
-    flex: 0 0 10vw;
-    @include breakpoint(desktop) {
-      flex: 0 0 25vw;
-    }
-    @include breakpoint(highres) {
-      flex: 0 0 30vw;
-    }
-    &:hover {
-      .endpointLeftHoverShow {
-        opacity: 1 !important;
-      }
-    }
-  }
-}
-
-.darkTheme {
-  .Detail {
-    .attributeBorderBottom:not(:last-of-type) {
-      border-bottom: 1px solid #4E4C4C;
-    }
   }
 }

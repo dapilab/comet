@@ -58,20 +58,18 @@ export default class ResponsesRender extends Component {
       }
     }
     return (
-      <div className="ResponsesRender pt-5">
+      <div className="ResponsesRender">
         {/* Header */}
-        <div className="pt-2 flex items-center mb-2">
+        <div className="pt-2 pb-1 flex items-center sectionTitle">
           {/* Title */}
-          <div className="gradientBorder mr-4">
-            <p className="text-sm relative leading-none">Response</p>
-          </div>
+          <p className="text-sm font-medium mr-3">Response</p>
           {/* Statuc code */}
           <div className="flex flex-wrap">
             {statusCodes.map((statusCode, idx) => (
               <span
                 key={statusCode}
                 onClick={this.changeStatusCode.bind(this, idx)}
-                className={classnames("w-8 mr-2 block cursor-pointer transition-20", {
+                className={classnames("w-8 text-sm mr-2 block cursor-pointer transition-20", {
                   "font-bold": idx === statusCodeIdx,
                   "blue-purple": idx === statusCodeIdx && String(statusCode)[0] === "2",
                   purple: idx === statusCodeIdx && String(statusCode)[0] === "3",
@@ -84,18 +82,6 @@ export default class ResponsesRender extends Component {
             ))}
           </div>
         </div>
-
-        {/* Content-type and description */}
-        {(contentType || description) &&
-          <p className="leading-tight text-sm grey-light py-2">
-            {/* Content type */}
-            {contentType && <span>{contentType}</span>}
-            {/* Divider */}
-            {contentType && description && <span className="inline-block mr-1">,</span>}
-            {/* Description */}
-            {description && <span>{description}</span>}
-          </p>
-        }
 
         {/* Example or schema */}
         <div className="flex items-center text-xs py-2">
@@ -117,8 +103,20 @@ export default class ResponsesRender extends Component {
           </p>
         </div>
 
+        {/* Content-type and description */}
+        {(contentType || description) &&
+          <p className="leading-tight text-sm grey-light pb-1">
+            {/* Content type */}
+            {contentType && <span>{contentType}</span>}
+            {/* Divider */}
+            {contentType && description && <span className="inline-block mr-1">,</span>}
+            {/* Description */}
+            {description && <span>{description}</span>}
+          </p>
+        }
+
         {/* Content */}
-        <div className="text-sm grey -mt-1">
+        <div className="text-sm grey-dark">
           {schemElem}
         </div>
       </div>
