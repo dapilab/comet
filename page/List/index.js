@@ -15,6 +15,7 @@ require("./index.scss");
 @observer
 export default class List extends Component {
   static propTypes = {
+    className: PropTypes.string,
     selectedEndpointIds: PropTypes.array,
     selectedTagIds: PropTypes.array
   };
@@ -145,10 +146,11 @@ export default class List extends Component {
   }
 
   render() {
-    const { selectedTagIds, selectedEndpointIds } = this.props;
+    const { selectedTagIds, selectedEndpointIds, className } = this.props;
     const { isAddingTag, isAddingComponent, isAddingDefaultAPI } = this.state;
     return (
-      <div className="ProjectAPIList h-full sticky top-0">
+      <div
+        className={classnames("ProjectAPIList h-full sticky top-0", className)}>
         <div className="ProjectAPIListInner h-full overflow-y-auto pb-10 pr-3">
           {/* API header */}
           <div className="apiHeader flex items-center justify-between relative ">

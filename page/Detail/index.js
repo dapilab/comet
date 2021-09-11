@@ -45,7 +45,7 @@ export default class Detail extends Component {
     return (
       <div
         id={this.detailId}
-        className="Detail flex-1 h-full overflow-y-auto">
+        className="Detail">
         <div
           id={this.detailTopBarId}
           className="h-1 -mt-1" />

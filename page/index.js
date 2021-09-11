@@ -56,12 +56,8 @@ export default class Application extends Component {
     const mainHTML = document.getElementById(this.mainId);
     mainHTML.style.height = `calc(100vh - ${headerHeight}px)`;
 
-    // Setup list width
-    const listWidth = localStorage.get(this.storageKeyForWidth, "float") || 16;
-
     this.setState({
-      isExample,
-      listWidth
+      isExample
     });
 
     // Load example
@@ -106,24 +102,6 @@ export default class Application extends Component {
     }
   }
 
-  // Width related
-  handleWidthDrag(e) {
-    e.preventDefault();
-    const { listWidth } = this.state;
-    const maxListWidth = 30;
-    const minListWidth = 10;
-    let newListWidth = listWidth + e.movementX / 15;
-    newListWidth = Math.max(Math.min(newListWidth, maxListWidth), minListWidth);
-    this.setState({
-      listWidth: newListWidth
-    });
-  }
-
-  saveWidthIntoStorage() {
-    const { listWidth } = this.state;
-    localStorage.set(this.storageKeyForWidth, listWidth);
-  }
-
   updateState(data) {
     this.setState(data);
   }
@@ -140,7 +118,7 @@ export default class Application extends Component {
   }
 
   render() {
-    const { selectedEndpointIds, selectedTagIds, isFullSchemaOpen, listWidth, isExample } = this.state;
+    const { selectedEndpointIds, selectedTagIds, isFullSchemaOpen, isExample } = this.state;
     return (
       <div className="app">
         {/* Header */}
@@ -153,14 +131,13 @@ export default class Application extends Component {
         {/* Main */}
         <div
           id={this.mainId}
-          className="ProjectAPI h-full flex wrapper">
+          className="ProjectAPI h-full flex overflow-y-auto wrapper">
           {appStore.isLoaded &&
             <Fragment>
               {/* Left list */}
               <List
                 selectedTagIds={selectedTagIds}
-                selectedEndpointIds={selectedEndpointIds}
-                style={{ flex: `0 0 ${listWidth}rem` }} />
+                selectedEndpointIds={selectedEndpointIds} />
 
               {/* Right detail content */}
               <Detail
