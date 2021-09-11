@@ -44,17 +44,16 @@ module.exports = {
       {
         test: /\.(sa|sc|c)ss$/,
         use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-            options: {
-              hmr: process.env.NODE_ENV === "development"
-            }
-          },
+          MiniCssExtractPlugin.loader,
           "css-loader",
           {
             loader: "postcss-loader",
             options: {
-              plugins: () => [tailwindcss, autoprefixer]
+              postcssOptions: {
+                plugins: [
+                  [tailwindcss, autoprefixer]
+                ]
+              }
             }
           },
           "sass-loader"

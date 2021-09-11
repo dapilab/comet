@@ -11,6 +11,7 @@ import List from "./List";
 import Detail from "./Detail";
 import FullSchema from "./FullSchema";
 
+require("tailwindcss/tailwind.css");
 require("../shared-style/basic.scss");
 require("./index.scss");
 
