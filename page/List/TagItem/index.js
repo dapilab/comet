@@ -5,9 +5,11 @@ import PropTypes from "prop-types";
 import { tagStore, endpointStore } from "stores";
 
 import { jumpToEndpoint, getListEndpointId, getListTagId } from "utils/helper";
+import stopPropagation from "utils/stopPropagation";
 
 import SubMenu from "components/SubMenu";
 import Text from "components/Text";
+import Input from "components/Input";
 
 require("./index.scss");
 
@@ -15,13 +17,15 @@ require("./index.scss");
 export default class ListTagItem extends Component {
   static propTypes = {
     tagId: PropTypes.string.isRequired,
-    selectedEndpointIds: PropTypes.array
+    selectedEndpointIds: PropTypes.array,
+    focusInput: PropTypes.func,
+    addNewAPI: PropTypes.func
   };
 
   constructor(props) {
     super(props);
     this.state = {
-      isAddingAPI: false
+      isDefaultTag: props.tagId === tagStore.getDefaultTagId()
     };
     this.myRefs = {
       addAPIInputName: createRef()
@@ -36,61 +40,75 @@ export default class ListTagItem extends Component {
     });
   }
 
-  toggleIsAddingAPI() {
-    const { myRefs } = this;
-    const { closeAddingNew } = this.props;
-    const { isAddingAPI } = this.state;
-    const isToClose = !isAddingAPI === false;
-    this.setState({
-      isAddingAPI: !isAddingAPI
-    }, () => {
-      if (!isToClose) {
-        myRefs.addAPIInputName.current.focus();
-        return;
-      }
-      if (closeAddingNew) closeAddingNew();
-    });
+  focusInput(ref, count = 0) {
+    if (count > 10) return;
+    if (!ref.current) return setTimeout(() => this.focusInput(ref, count + 1), 200);
+    ref.current.focus();
   }
 
-  closeIsAddingAPI() {
-    this.setState({
-      isAddingAPI: false
-    });
-  }
-
-  onKeyUpNewAPI(e) {
-    if (e.keyCode === 13) {
-      this.saveNewAPI();
+  onChangeAddAPI(value) {
+    if (value === "tag") {
+      this.focusInput(this.myRefs.addTagInput);
+      return {
+        customerComponent: (closeFn) => (
+          <div
+            className="py-3 px-6 flex flex-col items-center"
+            onClick={::this.stopPropagation}>
+            <Input
+              placeholder="New tag name"
+              className="w-48"
+              onKeyUp={this.onKeyUpNewTag.bind(this, closeFn)}
+              ref={this.myRefs.addTagInput} />
+            <div className="flex items-center justify-center mt-4 text-sm">
+              <button
+                className="btn secondary py-1 w-20 mx-2"
+                onClick={closeFn}>
+                Cancel
+              </button>
+              <button
+                className="btn primary py-1 w-20 mx-2"
+                onClick={this.saveNewTag.bind(this, closeFn)}>
+                Save
+              </button>
+            </div>
+          </div>
+        )
+      };
+    }
+    if (value === "api") {
+      this.focusInput(this.myRefs.addDefaultAPI);
+      return {
+        customerComponent: (closeFn) => (
+          <div
+            className="py-3 px-6 flex flex-col items-center"
+            onClick={::this.stopPropagation}>
+            <Input
+              placeholder="New default API name"
+              className="w-48"
+              onKeyUp={this.onKeyUpNewDefaultAPI.bind(this, closeFn)}
+              ref={this.myRefs.addDefaultAPI} />
+            <div className="flex items-center justify-center mt-4 text-sm">
+              <button
+                className="btn secondary py-1 w-20 mx-2"
+                onClick={closeFn}>
+                Cancel
+              </button>
+              <button
+                className="btn primary py-1 w-20 mx-2"
+                onClick={this.saveNewDefaultAPI.bind(this, closeFn)}>
+                Save
+              </button>
+            </div>
+          </div>
+        )
+      };
     }
   }
 
-  async saveNewAPI() {
-    const { myRefs } = this;
-    const { tagId } = this.props;
-    const nameValue = myRefs.addAPIInputName.current.value;
-    if (!nameValue) return;
-
-    const newEndpoint = await endpointStore.create({
-      name: nameValue,
-      description: "",
-      method: "get",
-      tagId,
-      responses: {
-        200: {
-          content: {
-            "application/json": {
-              schema: {
-                type: "object"
-              }
-            }
-          }
-        }
-      }
-    }, { unshift: true });
-    this.toggleIsAddingAPI();
-    setTimeout(() => {
-      jumpToEndpoint(newEndpoint.id);
-    });
+  onKeyUpNewAPI(closeFn, e) {
+    if (e.keyCode === 13) {
+      this.saveNewAPI(closeFn);
+    }
   }
 
   async moreAction(value) {
@@ -109,11 +127,28 @@ export default class ListTagItem extends Component {
     }
   }
 
+  async saveNewAPI(closeFn) {
+    const { addNewAPI, tagId } = this.props;
+    const apiName = this.myRefs.addAPIInputName.current.value;
+    if (!apiName) return;
+    await addNewAPI(apiName, tagId);
+    closeFn();
+    this.myRefs.addAPIInputName.current.clean();
+  }
+
   render() {
-    const { tagId, selectedEndpointIds } = this.props;
-    const { isAddingAPI } = this.state;
+    const { tagId, selectedEndpointIds, focusInput } = this.props;
+    const { isDefaultTag } = this.state;
     const tag = tagStore.observerTrigger && tagStore.data[tagId];
-    const isDefaultTag = tagId === tagStore.getDefaultTagId();
+
+    // More action options
+    const moreOpts = [];
+    if (!isDefaultTag) {
+      moreOpts.push({
+        value: "remove",
+        label: "Remove Tag"
+      });
+    }
     return (
       <div
         id={getListTagId(tagId)}
@@ -127,53 +162,55 @@ export default class ListTagItem extends Component {
             content={isDefaultTag && "Default" || tag.name}
             onSave={::this.changeTagName}
             enterForSave />
-          {/* Actions */}
-          <div className="flex items-center">
-            {!isDefaultTag &&
+          <div className="flex items-center opacity-0 headerHoverShow transition-20">
+            {moreOpts.length > 0 &&
               <SubMenu
                 className="flex align-center"
-                options={[{
-                  value: "remove",
-                  label: "Remove"
-                }]}
+                options={moreOpts}
                 onChange={::this.moreAction}
                 align="right">
-                <i className="iconfont icon-elipsis font-bold grey hover:blue-purple cursor-pointer opacity-0 headerHoverShow transition-20" />
+                <i
+                  className="iconfont iconelipsis font-bold grey hover:blue-purple cursor-pointer" />
               </SubMenu>
             }
-            <i
-              className="iconfont icon-add-select text-lg font-bold grey hover:blue-purple cursor-pointer opacity-0 headerHoverShow ml-2 transition-20"
-              onClick={::this.toggleIsAddingAPI} />
+            <SubMenu
+              className="flex align-center"
+              optClassName="mt-1"
+              onOpen={focusInput.bind(this, this.myRefs.addAPIInputName, 0)}
+              customerComponent={(closeFn) => (
+                <div
+                  className="py-3 px-6 flex flex-col items-center"
+                  onClick={stopPropagation}>
+                  <Input
+                    placeholder="New API name"
+                    className="w-48"
+                    onKeyUp={this.onKeyUpNewAPI.bind(this, closeFn)}
+                    ref={this.myRefs.addAPIInputName} />
+                  <div className="flex items-center justify-center mt-4 text-sm">
+                    <button
+                      className="btn secondary py-1 w-20 mx-2"
+                      onClick={closeFn}>
+                      Cancel
+                    </button>
+                    <button
+                      className="btn primary py-1 w-20 mx-2"
+                      onClick={this.saveNewAPI.bind(this, closeFn)}>
+                      Save
+                    </button>
+                  </div>
+                </div>
+              )}
+              align="right">
+              <i className="iconfont icon-add text-lg font-bold grey hover:blue-purple cursor-pointer opacity-0 headerHoverShow ml-2 transition-20" />
+            </SubMenu>
           </div>
         </div>
-
-        {/* Add new api */}
-        {isAddingAPI &&
-          <div className="flex my-1 items-center justify-between showUpFromLeftToRight">
-            <input
-              placeholder="API name..."
-              className="input bottomBorder flex-1 mr-5 text-sm"
-              onKeyUp={::this.onKeyUpNewAPI}
-              ref={this.myRefs.addAPIInputName} />
-            <div className="flex items-center">
-              <button
-                className="btn secondary text-center py-1 text-xs self-start rounded-full w-12"
-                onClick={::this.toggleIsAddingAPI}>
-                Cancel
-              </button>
-              <button
-                className="btn primary text-center py-1 text-xs self-start rounded-full w-12 ml-2"
-                onClick={::this.saveNewAPI}>
-                Save
-              </button>
-            </div>
-          </div>
-        }
 
         {/* API list */}
         {endpointStore.observerTrigger && endpointStore.tags[tagId] && endpointStore.tags[tagId].data
           .filter((endpointId) => {
-            if (!selectedEndpointIds) return true;
+            if (!selectedEndpointIds) return false;
+            if (selectedEndpointIds.length === 0) return true;
             return selectedEndpointIds.includes(endpointId);
           })
           .map((endpointId) => {

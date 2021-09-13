@@ -69,7 +69,7 @@ class Store extends BaseStore {
     if (endpoint.tagId) {
       this.tags[endpoint.tagId] = this.tags[endpoint.tagId] || {
         data: [],
-        isDefault: endpoint.tagId === tagStore.getDefaultTagId()
+        isDefault: endpoint.tagId === tagStore.defaultTagId
       };
       if (unshift) {
         this.tags[endpoint.tagId].data.unshift(endpoint.id);

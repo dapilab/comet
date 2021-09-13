@@ -33,15 +33,16 @@ export default class Detail extends Component {
       .filter((tagId) => endpointStore.tags[tagId])
       .map((tagId) => endpointStore.tags[tagId].data)
       .reduce((acc, endIds) => acc.concat(endIds), [])
-      .filter((endpoinId) => {
-        if (!selectedEndpointIds) return true;
-        return selectedEndpointIds.includes(endpoinId);
+      .filter((endpointId) => {
+        if (!selectedEndpointIds) return false;
+        if (selectedEndpointIds.length === 0) return true;
+        return selectedEndpointIds.includes(endpointId);
       });
   }
 
   render() {
     const { headerId } = this.props;
-    const endpointIds = endpointStore.observerTrigger && this.genEndpointIdsFromTags(tagStore.getList());
+    const endpointIds = endpointStore.observerTrigger && this.genEndpointIdsFromTags(tagStore.fullList);
     return (
       <div
         id={this.detailId}

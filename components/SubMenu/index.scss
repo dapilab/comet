@@ -3,23 +3,15 @@
 .SubMenu {
   &.childShow {
     i {
-      opacity: 100% !important;
+      opacity: 1 !important;
     }
   }
-  & > .opts {
+  .opts {
     @extend %fadeUpHide;
     background: #fff;
     top: 100%;
     &.active {
       @extend %fadeUpShow;
-    }
-  }
-}
-
-.darkTheme {
-  .SubMenu {
-    & > .opts {
-      background: #222;
     }
   }
 }

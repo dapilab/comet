@@ -5,10 +5,12 @@ import classnames from "classnames";
 
 import { tagStore, componentStore, endpointStore } from "stores";
 
-import { jumpToComponent, getListComponentId } from "utils/helper";
+import { jumpToEndpoint, jumpToComponent, getListComponentId } from "utils/helper";
+import stopPropagation from "utils/stopPropagation";
 
-import SubMenu from "components/SubMenu";
 import TagItem from "./TagItem";
+import SubMenu from "components/SubMenu";
+import Input from "components/Input";
 
 require("./index.scss");
 
@@ -23,131 +25,196 @@ export default class List extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      isAddingTag: false,
-      isAddingDefaultAPI: false,
-      isAddingComponent: false
-    };
-
     this.myRefs = {
       addTagInput: createRef(),
       addComponentInput: createRef(),
-      defaultTag: createRef()
+      defaultTag: createRef(),
+      addDefaultAPI: createRef()
     };
   }
 
   onChangeAddAPI(value) {
     if (value === "tag") {
-      return this.toggleIsAddingTag();
+      this.focusInput(this.myRefs.addTagInput);
+      return {
+        customerComponent: (closeFn) => (
+          <div
+            className="py-3 px-6 flex flex-col items-center"
+            onClick={stopPropagation}>
+            <Input
+              placeholder="New tag name"
+              className="w-48"
+              onKeyUp={this.onKeyUpNewTag.bind(this, closeFn)}
+              ref={this.myRefs.addTagInput} />
+            <div className="flex items-center justify-center mt-4 text-sm">
+              <button
+                className="btn secondary py-1 w-20 mx-2"
+                onClick={closeFn}>
+                Cancel
+              </button>
+              <button
+                className="btn primary py-1 w-20 mx-2"
+                onClick={this.saveNewTag.bind(this, closeFn)}>
+                Save
+              </button>
+            </div>
+          </div>
+        )
+      };
     }
     if (value === "api") {
-      return this.openAddingDefaultAPI();
+      this.focusInput(this.myRefs.addDefaultAPI);
+      return {
+        customerComponent: (closeFn) => (
+          <div
+            className="py-3 px-6 flex flex-col items-center"
+            onClick={stopPropagation}>
+            <Input
+              placeholder="New default API name"
+              className="w-48"
+              onKeyUp={this.onKeyUpNewDefaultAPI.bind(this, closeFn)}
+              ref={this.myRefs.addDefaultAPI} />
+            <div className="flex items-center justify-center mt-4 text-sm">
+              <button
+                className="btn secondary py-1 w-20 mx-2"
+                onClick={closeFn}>
+                Cancel
+              </button>
+              <button
+                className="btn primary py-1 w-20 mx-2"
+                onClick={this.saveNewDefaultAPI.bind(this, closeFn)}>
+                Save
+              </button>
+            </div>
+          </div>
+        )
+      };
     }
+  }
+
+  focusInput(ref, count = 0) {
+    if (count > 10) return;
+    if (!ref.current) return setTimeout(() => this.focusInput(ref, count + 1), 200);
+    ref.current.focus();
   }
 
   /**
    * Adding tag
    */
-  toggleIsAddingTag() {
-    const { myRefs } = this;
-    const { isAddingTag } = this.state;
-    const isToClose = !isAddingTag === false;
-    this.setState({
-      isAddingTag: !isAddingTag,
-      isAddingDefaultAPI: false
-    }, () => {
-      if (!isToClose) {
-        myRefs.addTagInput.current.focus();
-      }
-      this.closeAddingDefaultAPI();
-    });
-    return false;
-  }
-
-  onKeyUpNewTag(e) {
+  onKeyUpNewTag(closeFn, e) {
     if (e.keyCode === 13) {
-      this.saveNewTag();
+      this.saveNewTag(closeFn);
     }
   }
 
-  async saveNewTag() {
+  async saveNewTag(closeFn) {
     const { myRefs } = this;
     const { value } = myRefs.addTagInput.current;
     if (!value) return;
-
     await tagStore.findOrCreateByName(value, { unshift: true });
-    this.toggleIsAddingTag();
+    closeFn();
+  }
+
+  /**
+   * Adding new default API
+   */
+  onKeyUpNewDefaultAPI(closeFn, e) {
+    if (e.keyCode === 13) {
+      this.saveNewDefaultAPI(closeFn);
+    }
+  }
+
+  async saveNewDefaultAPI(closeFn) {
+    const apiName = this.myRefs.addDefaultAPI.current.value;
+    if (!apiName) return;
+    await this.addNewAPI(apiName);
+    closeFn();
   }
 
   /**
    * Adding API
    */
-  openAddingDefaultAPI() {
-    const { myRefs } = this;
-    this.setState({
-      isAddingTag: false,
-      isAddingDefaultAPI: true
-    }, () => {
-      myRefs.defaultTag.current.toggleIsAddingAPI();
-    });
-    return false;
-  }
-
-  closeAddingDefaultAPI() {
-    this.setState({
-      isAddingDefaultAPI: false
-    }, () => {
-      if (this.myRefs.defaultTag.current) {
-        this.myRefs.defaultTag.current.closeIsAddingAPI();
-      }
-    });
+  async addNewAPI(apiName, tagId) {
+    try {
+      await endpointStore.create({
+        name: apiName,
+        description: "",
+        method: "get",
+        responses: {
+          200: {
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object"
+                }
+              }
+            }
+          }
+        },
+        tagId: tagId || tagStore.defaultTagId
+      }, (newEndpointId) => {
+        setTimeout(() => {
+          jumpToEndpoint(newEndpointId);
+        }, 100);
+      });
+    } catch (err) {
+      // notifyStore.notifyError(err.message);
+    }
   }
 
   /**
    * Adding component
    */
-  toggleAddNewComponent() {
-    const { isAddingComponent } = this.state;
-    this.setState({
-      isAddingComponent: !isAddingComponent
-    }, () => {
-      if (!isAddingComponent) {
-        this.myRefs.addComponentInput.current.focus();
-      }
-    });
-  }
-
-  onKeyUpNewComponent(e) {
+  onKeyUpNewComponent(closeFn, e) {
     if (e.keyCode === 13) {
-      this.saveNewComponent();
+      this.saveNewComponent(closeFn);
     }
   }
 
-  async saveNewComponent() {
+  async saveNewComponent(closeFn) {
     const nameValue = this.myRefs.addComponentInput.current.value;
     if (!nameValue) return;
 
-    const newComponent = componentStore.create({
-      name: nameValue,
-      property: {
-        type: "object",
-        description: "",
-        properties: {
-          attr: {
-            type: "string"
+    try {
+      await componentStore.create({
+        name: nameValue,
+        property: {
+          type: "object",
+          description: "",
+          properties: {
+            attr: {
+              type: "string"
+            }
           }
         }
-      }
-    });
-    this.toggleAddNewComponent();
-    setTimeout(() => {
-      jumpToComponent(newComponent.id);
-    }, 100);
+      }, (newComponentId) => {
+        setTimeout(() => jumpToComponent(newComponentId), 100);
+      });
+    } catch (err) {
+      // notifyStore.notifyError(err.error);
+    }
+    closeFn();
+    this.myRefs.addComponentInput.current.clean();
   }
 
   render() {
     const { selectedTagIds, selectedEndpointIds, className } = this.props;
-    const { isAddingTag, isAddingComponent, isAddingDefaultAPI } = this.state;
+
+    // Tags
+    const tagIds = endpointStore.observerTrigger
+      ? tagStore.fullList
+      : [];
+
+    // Default tag id
+    let defaultTagId = tagStore.defaultTagId;
+    if (!selectedTagIds) {
+      defaultTagId = null;
+    } else if (selectedTagIds.length > 0 && !selectedTagIds.includes(defaultTagId)) {
+      defaultTagId = null;
+    }
+    if (!endpointStore.tags[defaultTagId] || endpointStore.tags[defaultTagId].data.length === 0) {
+      defaultTagId = null;
+    }
     return (
       <div
         className={classnames("ProjectAPIList h-full sticky top-0", className)}>
@@ -159,70 +226,46 @@ export default class List extends Component {
             </p>
             <SubMenu
               className="flex align-center"
+              optClassName="mt-1"
               options={[
                 { value: "tag", label: "Add New Tag" },
-                { value: "api", label: "Add New API" }
+                { value: "api", label: "Add Default API" }
               ]}
               onChange={::this.onChangeAddAPI}
               align="right">
-              <i className="iconfont icon-add-select text-xl font-bold grey hover:blue-purple leading-none cursor-pointer opacity-0 transition-20 headerHoverShow" />
+              <i className="iconfont icon-add text-lg font-bold grey hover:blue-purple leading-none cursor-pointer opacity-0 transition-20 headerHoverShow" />
             </SubMenu>
           </div>
 
-          {/* Adding tag */}
-          {isAddingTag &&
-            <div className="flex mt-3 mb-4 showUpFromLeftToRight items-center">
-              <input
-                placeholder="Tag name..."
-                className="input bottomBorder flex-1 mr-5 text-sm"
-                onKeyUp={::this.onKeyUpNewTag}
-                ref={this.myRefs.addTagInput} />
-              <div className="flex items-center">
-                <button
-                  className="btn primary text-center py-1 text-xs self-start rounded-full w-16 mr-1"
-                  onClick={::this.saveNewTag}>
-                  Save
-                </button>
-                <button
-                  className="btn secondary text-center py-1 text-xs self-start rounded-full pl-2"
-                  onClick={::this.toggleIsAddingTag}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          }
-
           {/* Tag list with apis */}
-          {tagStore.observerTrigger && tagStore.getList()
+          {tagIds
             .filter((tagId) => {
-              if (isAddingDefaultAPI) return true;
-              if (selectedTagIds) {
+              if (tagId === tagStore.defaultTagId) return false;
+              if (!selectedTagIds) return false;
+              if (selectedTagIds.length > 0) {
                 return selectedTagIds.includes(tagId);
               }
-              if (tagId !== tagStore.getDefaultTagId()) return true;
-
-              // If Default tag is empty, hide it
-              if (!endpointStore.tags[tagId] || endpointStore.tags[tagId].data.length === 0) {
-                return false;
-              }
-
               return true;
             })
-            .map((tagId, idx) => {
-              const isDefaultTag = tagId === tagStore.getDefaultTagId();
-              return (
-                (
-                  <div
-                    key={tagId}
-                    className={classnames({ "mt-8": idx !== 0 })}>
-                    <TagItem
-                      tagId={tagId}
-                      selectedEndpointIds={selectedEndpointIds}
-                      ref={isDefaultTag && this.myRefs.defaultTag || null} />
-                  </div>
-                )
-              );
-            })
+            .map((tagId, idx) => (
+              <div
+                key={tagId}
+                className={classnames({ "mt-8": idx !== 0 })}>
+                <TagItem
+                  tagId={tagId}
+                  selectedEndpointIds={selectedEndpointIds}
+                  focusInput={::this.focusInput}
+                  addNewAPI={::this.addNewAPI} />
+              </div>
+            ))
+          }
+          {/* Default tag */}
+          {defaultTagId &&
+            <TagItem
+              tagId={defaultTagId}
+              selectedEndpointIds={selectedEndpointIds}
+              focusInput={::this.focusInput}
+              addNewAPI={::this.addNewAPI} />
           }
 
           {/* Component header */}
@@ -230,33 +273,37 @@ export default class List extends Component {
             <label className="mr-2 cursor-default leading-none font-bold font-sf text-xl">
               Components
             </label>
-            <i
-              className="headerIcon iconfont icon-add-select leading-tight text-xl grey z-10 cursor-pointer opacity-0 transition-20 headerHoverShow"
-              onClick={::this.toggleAddNewComponent} />
+            <SubMenu
+              className="flex align-center"
+              optClassName="mt-1"
+              onOpen={this.focusInput.bind(this, this.myRefs.addComponentInput, 0)}
+              customerComponent={(closeFn) => (
+                <div
+                  className="py-3 px-6 flex flex-col items-center"
+                  onClick={stopPropagation}>
+                  <Input
+                    placeholder="New component name"
+                    className="w-48"
+                    onKeyUp={this.onKeyUpNewComponent.bind(this, closeFn)}
+                    ref={this.myRefs.addComponentInput} />
+                  <div className="flex items-center justify-center mt-4 text-sm">
+                    <button
+                      className="btn secondary py-1 w-20 mx-2"
+                      onClick={closeFn}>
+                      Cancel
+                    </button>
+                    <button
+                      className="btn primary py-1 w-20 mx-2"
+                      onClick={this.saveNewComponent.bind(this, closeFn)}>
+                      Save
+                    </button>
+                  </div>
+                </div>
+              )}
+              align="right">
+              <i className="iconfont icon-add text-lg font-bold grey hover:blue-purple leading-none cursor-pointer opacity-0 transition-20 headerHoverShow" />
+            </SubMenu>
           </div>
-
-          {/* Adding component  */}
-          {isAddingComponent &&
-            <div className="flex mb-4 items-center justify-between showUpFromLeftToRight">
-              <input
-                placeholder="Name..."
-                className="input bottomBorder flex-1 mr-5 text-sm"
-                onKeyUp={::this.onKeyUpNewComponent}
-                ref={this.myRefs.addComponentInput} />
-              <div className="flex items-center">
-                <button
-                  className="btn primary text-xs text-center py-1 text-xs self-start rounded-full w-16 mr-1"
-                  onClick={::this.saveNewComponent}>
-                  Save
-                </button>
-                <button
-                  className="btn secondary text-xs text-center py-1 text-xs self-start rounded-full pl-2"
-                  onClick={::this.toggleAddNewComponent}>
-                  Cancel
-                </button>
-              </div>
-            </div>
-          }
 
           {/* Component list */}
           {componentStore.observerTrigger &&

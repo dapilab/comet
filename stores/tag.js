@@ -1,10 +1,10 @@
-import { observable, action } from "mobx";
+import { observable, action, computed } from "mobx";
 import { v4 as uuidv4 } from "uuid";
 
 import BaseStore from "./BaseStore";
 
 class Store extends BaseStore {
-  @observable list = [];
+  @observable list = []; // [tagId]
 
   constructor() {
     super();
@@ -22,6 +22,10 @@ class Store extends BaseStore {
     this.data[tag.id] = data;
   }
 
+  @computed get fullList() {
+    return this.list.concat([this.defaultTagId]);
+  }
+
   @action reset() {
     this.defaultTagId = uuidv4();
     this.data = { [this.defaultTagId]: { name: "Default" } };
@@ -29,11 +33,11 @@ class Store extends BaseStore {
   }
 
   @action findByName(tagName) {
-    return this.list.find((id) => this.data[id].name === tagName);
+    return this.fullList.find((id) => this.data[id].name === tagName);
   }
 
   @action findOrCreateByName(tagName, { unshifit = false } = {}) {
-    let tagId = this.getList().find((id) => this.data[id].name === tagName);
+    let tagId = this.fullList.find((id) => this.data[id].name === tagName);
     let isNew = false;
     if (!tagId) {
       tagId = uuidv4();
@@ -67,10 +71,6 @@ class Store extends BaseStore {
 
   @action getDefaultTagId() {
     return this.defaultTagId;
-  }
-
-  @action getList() {
-    return this.list.concat([this.defaultTagId]);
   }
 }
 

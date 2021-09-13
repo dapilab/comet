@@ -11,16 +11,17 @@ export default class SubMenu extends Component {
     options: PropTypes.arrayOf(PropTypes.shape({
       value: PropTypes.string,
       label: PropTypes.string,
-      tooltip: PropTypes.string,
       description: PropTypes.string,
       color: PropTypes.string
-    })).isRequired,
-    onChange: PropTypes.func.isRequired,
-    align: PropTypes.oneOf(["left", "right"]),
+    })),
+    onChange: PropTypes.func,
+    align: PropTypes.oneOf(["left", "right", "center"]),
     onOpen: PropTypes.func,
     onClose: PropTypes.func,
     childShowWhenOpen: PropTypes.bool,
-    eventBubble: PropTypes.bool
+    eventBubble: PropTypes.bool,
+    descriptionClassName: PropTypes.string,
+    customerComponent: PropTypes.func
   }
 
   static defaultProps = {
@@ -33,7 +34,8 @@ export default class SubMenu extends Component {
     super(props);
     this.state = {
       isOpen: false,
-      optAction: {} // { index: { action: 'confirm', cb: func } }
+      optAction: {}, // { index: { action: 'confirm', cb: func } }
+      customerComponent: props.customerComponent || null
     };
     this.close = this.close.bind(this);
   }
@@ -43,7 +45,7 @@ export default class SubMenu extends Component {
   }
 
   toggle(e) {
-    const { eventBubble } = this.props;
+    const { eventBubble, customerComponent } = this.props;
     if (e && !eventBubble) {
       e.stopPropagation();
       e.nativeEvent.stopImmediatePropagation();
@@ -52,7 +54,10 @@ export default class SubMenu extends Component {
     const { isOpen } = this.state;
 
     const newState = { isOpen: !isOpen };
-    if (!isOpen) { newState.optAction = {}; }
+    if (!isOpen) {
+      newState.optAction = {};
+      newState.customerComponent = customerComponent || null;
+    }
     this.setState(newState, () => {
       const newIsOpen = !isOpen;
       if (newIsOpen) {
@@ -87,8 +92,16 @@ export default class SubMenu extends Component {
         if (!handler) this.close();
         break;
       }
+
+      //  { action, cb, customerComponent }
       case "object": {
-        optAction[idx] = handler; // { action, cb }
+        if (handler.customerComponent) {
+          return this.setState({
+            customerComponent: handler.customerComponent
+          });
+        }
+
+        optAction[idx] = handler;
         this.setState({ optAction });
         break;
       }
@@ -112,6 +125,7 @@ export default class SubMenu extends Component {
   }
 
   genOptions(options) {
+    const { descriptionClassName } = this.props;
     const { optAction } = this.state;
     return options.map((opt, idx) => {
       if (optAction[idx]) {
@@ -121,7 +135,7 @@ export default class SubMenu extends Component {
             return (
               <div
                 key={opt.value}
-                className="whitespace-no-wrap cursor-pointer py-2 px-6 flex items-center justify-between">
+                className="whitespace-nowrap cursor-pointer py-2 px-6 flex items-center justify-between">
                 <span
                   className="red transition-20 hover:opacity-75"
                   onClick={this.cancelAction.bind(this, idx)}>
@@ -138,24 +152,30 @@ export default class SubMenu extends Component {
         }
       }
 
-      return (
+      const optContent = (
         <div
           key={opt.value}
-          className="whitespace-no-wrap cursor-pointer py-2 px-6 transition-35 hover:opacity-50"
+          className="whitespace-nowrap cursor-pointer py-2 px-6 transition-35 hover:opacity-50"
           style={{ color: opt.color || "inherit" }}
           onClick={this.onClickOpt.bind(this, opt.value, idx)}>
           <p>{opt.label}</p>
-          {opt.description && <p className="text-xs grey-light">{opt.description}</p> || undefined}
+          {opt.description &&
+            <p className={classnames("text-xs grey-light", descriptionClassName)}>
+              {opt.description}
+            </p>
+          }
         </div>
       );
+
+      return optContent;
     });
   }
 
   render() {
     let { className } = this.props;
     const { optClassName, options, align, childShowWhenOpen } = this.props;
-    const { isOpen } = this.state;
-    const optionItems = this.genOptions(options);
+    const { isOpen, customerComponent } = this.state;
+    const optionItems = !customerComponent && this.genOptions(options);
     if (!/(absolute|relative|fixed|sticky)/.test(className)) className += " relative";
     return (
       <div
@@ -165,14 +185,21 @@ export default class SubMenu extends Component {
         onClick={::this.toggle}>
           {...this.props.children}
         <div
-          className={classnames("opts grey-shadow absolute text-sm rounded py-2 z-10", optClassName, {
-            active: isOpen,
-            "pointer-events-none": !isOpen,
-            "left-0": align === "left",
-            "right-0": align === "right"
-          })}
-          onWheel={(e) => e.stopPropagation()}>
-          {optionItems}
+          className={classnames("absolute left-0 right-0 top-full", {
+            "flex justify-center": align === "center"
+          })}>
+          <div
+            className={classnames("opts grey-shadow absolute text-sm rounded py-2 z-10", optClassName, {
+              active: isOpen,
+              "pointer-events-none": !isOpen,
+              "left-0": align === "left",
+              "right-0": align === "right"
+            })}
+            onWheel={(e) => e.stopPropagation()}>
+            {customerComponent
+              ? customerComponent(::this.close)
+              : optionItems}
+          </div>
         </div>
       </div>
     );

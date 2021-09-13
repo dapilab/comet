@@ -102,7 +102,7 @@ class Store {
 
   @action toOPENAPI({ keepEmptyTag = false } = {}) {
     // tags
-    const tags = tagStore.getList()
+    const tags = tagStore.fullList
       .filter((tagId) => {
         if (keepEmptyTag) return true;
         return endpointStore.tags[tagId] && endpointStore.tags[tagId].data.length > 0;
@@ -113,7 +113,7 @@ class Store {
 
     // paths
     const paths = {};
-    tagStore.getList()
+    tagStore.fullList
       .map((tagId) => {
         if (!endpointStore.tags[tagId]) return [];
         return endpointStore.tags[tagId].data;

@@ -24,8 +24,8 @@ export default class Application extends Component {
     this.state = {
       isExample: false,
       // Searching
-      selectedEndpointIds: null,
-      selectedTagIds: null,
+      selectedEndpointIds: [],
+      selectedTagIds: [],
       // Full schema
       isFullSchemaOpen: false
     };

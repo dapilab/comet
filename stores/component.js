@@ -30,10 +30,12 @@ class Store extends BaseStore {
     this.list = [];
   }
 
-  @action create(component) {
-    component.id = component.id || uuidv4();
+  @action create(component, callback) {
+    const id = component.id || uuidv4();
+    component.id = id;
     this.addComponent(component);
-    this.list.push(component.id);
+    this.list.push(id);
+    if (callback) callback(id);
     return component;
   }
 
