@@ -116,30 +116,40 @@ const genDescription = (schema) => {
   return insertSeperatorBetweenElement(descElements, ". ");
 };
 
-export const convertComponentToSchema = (component, hide = []) => {
+export const convertComponentToSchema = (component, parentRefs = []) => {
   const componentProperty = cloneDeep(component.property);
-  if (componentProperty.properties) {
-    hide.forEach((attr) => {
-      delete componentProperty.properties[attr];
-    });
-  }
-
-  if (!componentProperty.hide) return componentProperty;
-  if (componentProperty.properties) {
-    componentProperty.hide.forEach((attr) => {
-      delete componentProperty.properties[attr];
-    });
-  }
-  return componentProperty;
+  return _convertRefInsideComponent(componentProperty, parentRefs);
 };
 
-const getSchemaByRef = (ref, hide = []) => {
+const _convertRefInsideComponent = (schema, parentRefs = []) => {
+  schema = cloneDeep(schema);
+  if (schema instanceof Object) {
+    if (schema.$ref) {
+      return getSchemaByRef(schema.$ref, parentRefs);
+    }
+
+    Object.keys(schema).forEach((attr) => {
+      schema[attr] = _convertRefInsideComponent(schema[attr], parentRefs);
+    });
+    return schema;
+  }
+  if (schema instanceof Array) {
+    schema = schema.map((item) => _convertRefInsideComponent(item, parentRefs));
+  }
+
+  return schema;
+};
+
+const getSchemaByRef = (ref, parentRefs = []) => {
+  // Prevent $ref both-way linking
+  if (parentRefs.includes(ref)) return { type: "object", properties: {} };
+
   const componentId = componentStore.findByName(ref);
   if (!componentId) return;
 
   const component = componentStore.data[componentId];
   if (!component) return;
-  return convertComponentToSchema(component, hide);
+  return convertComponentToSchema(component, parentRefs.concat([ref]));
 };
 
 const translateFromAllOf = (schema) => {
@@ -149,7 +159,7 @@ const translateFromAllOf = (schema) => {
 
   schema.allOf.forEach((item, idx) => {
     if (item.$ref) {
-      item = getSchemaByRef(item.$ref, item.hide);
+      item = getSchemaByRef(item.$ref);
       if (!item) return;
       schema.allOf[idx] = item;
     }
@@ -195,7 +205,7 @@ export const renderModelAttribute = (
   schema = cloneDeep(schema);
 
   if (schema.$ref) {
-    schema = getSchemaByRef(schema.$ref, schema.hide);
+    schema = getSchemaByRef(schema.$ref);
     if (!schema) return;
     return renderModelAttribute(name, schema, {});
   }
@@ -283,7 +293,7 @@ export const renderModelAttribute = (
     const itemsSchema = schema.oneOf || schema.anyOf;
     const itemsElements = itemsSchema.map((itemSchema, idx) => {
       if (itemSchema.$ref) {
-        itemSchema = getSchemaByRef(itemSchema.$ref, itemSchema.hide);
+        itemSchema = getSchemaByRef(itemSchema.$ref);
         if (!itemSchema) return;
       }
       const attributeElem = renderModelAttribute("", itemSchema, { alwaysShowCurrent: true });
@@ -357,7 +367,7 @@ export const renderExampleSchema = (schema) => {
 const renderExampleAttribute = (key, value, required = false) => {
   value = cloneDeep(value);
   if (value.$ref) {
-    value = getSchemaByRef(value.$ref, value.hide);
+    value = getSchemaByRef(value.$ref);
     if (!value) return;
   }
 
@@ -491,7 +501,7 @@ class OfItem extends Component {
 const schemaToJS = (schema) => {
   if (!schema) return;
   schema = cloneDeep(schema);
-  if (schema.$ref) return schemaToJS(getSchemaByRef(schema.$ref, schema.hide));
+  if (schema.$ref) return schemaToJS(getSchemaByRef(schema.$ref));
   if (schema.oneOf) return schemaToJS(schema.oneOf[0]);
   if (schema.allOf && Array.isArray(schema.allOf)) {
     schema = translateFromAllOf(schema);
