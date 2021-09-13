@@ -1,0 +1,12 @@
+.Snippet {
+  min-height: 19rem;
+  max-height: 80vh;
+  .codeMirror {
+    width: 23rem;
+  }
+  .snippetItem {
+    &:not(:last-of-type) {
+      margin-bottom: 1.25rem;
+    }
+  }
+}

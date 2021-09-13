@@ -1,14 +1,16 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import CodeMirror from "codemirror";
 import YAML from "js-yaml";
+import CodeMirror from "codemirror";
+import { v4 as uuidv4 } from "uuid";
+import classnames from "classnames";
+
+import { componentStore } from "stores";
 
 import "codemirror/mode/yaml/yaml";
 import "codemirror/mode/yaml-frontmatter/yaml-frontmatter";
 import "codemirror/addon/hint/show-hint";
 import "codemirror/addon/lint/lint";
-
-import { endpointStore, componentStore } from "stores";
 
 import openapiLint from "libs/codeMirror/openapiLint";
 
@@ -20,35 +22,33 @@ require("./index.scss");
 export default class CodeMirrorComponet extends Component {
   static propTypes = {
     id: PropTypes.string,
-    type: PropTypes.oneOf(["endpoint", "component"])
+    className: PropTypes.string,
+    projectId: PropTypes.string,
+    type: PropTypes.oneOf(["endpoint", "component"]),
+    initialJSONValue: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
+    parseAndSave: PropTypes.func,
+    onChange: PropTypes.func
   }
 
   constructor(props) {
     super(props);
-    this.codeMirrorId = `CodeMirror-${props.id}`;
+    this.codeMirrorId = `CodeMirror-${props.id || uuidv4()}`;
     this.myCodeMirror = null;
     this.codeMirrorFirstLint = false;
+
+    this.dataForSave = null;
   }
 
   async componentDidMount() {
-    const { id, type } = this.props;
-
-    let openAPIJSON;
-    switch (type) {
-      case "endpoint":
-        openAPIJSON = endpointStore.toOpenAPIFormat(id);
-        break;
-      case "component":
-        openAPIJSON = componentStore.data[id].property;
-        break;
-    }
-
-    const yamlString = YAML.dump(openAPIJSON);
+    const { codeMirrorId } = this;
+    const { initialJSONValue, type } = this.props;
+    const yamlString = YAML.dump(initialJSONValue);
 
     // Initial code mirror
-    const htmlElem = document.getElementById(this.codeMirrorId);
+    const htmlElem = document.getElementById(codeMirrorId);
+
     this.myCodeMirror = CodeMirror(htmlElem, {
-      value: yamlString,
+      value: yamlString.replace(/\n$/, ""),
       mode: "yaml",
       tabSize: 2,
       indentUnit: 2,
@@ -65,7 +65,7 @@ export default class CodeMirrorComponet extends Component {
         }
       },
       lint: {
-        getAnnotations: openapiLint(type),
+        getAnnotations: type ? openapiLint(type) : null,
         onUpdateLinting: async (errors) => {
           if (!this.codeMirrorFirstLint) {
             this.codeMirrorFirstLint = true;
@@ -91,6 +91,9 @@ export default class CodeMirrorComponet extends Component {
 
     // Show hints
     this.myCodeMirror.on("cursorActivity", (cm) => {
+      const { type } = this.props;
+      if (!type) return;
+
       const { line, ch } = cm.getCursor();
       const matchContent = "$ref:";
       const aroundContent = cm.getRange({
@@ -100,67 +103,58 @@ export default class CodeMirrorComponet extends Component {
       });
       const matched = aroundContent.match(/\$ref:/);
       if (matched) {
+        const { projectId } = this.props;
         const hintCol = ch + matched.index + 1;
+        const listByRankingInProject = componentStore.listByRanking[projectId];
+
         const hasSpaceAfter = aroundContent.match(/\$ref:\s{1}/);
         const textPre = hasSpaceAfter ? "" : " ";
-        const hintComponentNames = componentStore.list
-          .map((componentId) => {
-            const component = componentStore.data[componentId];
-            return {
-              text: `${textPre}'#/components/schemas/${component.name}'`,
-              displayText: component.name
-            };
-          });
 
-        CodeMirror.showHint(cm, () => ({
-          list: hintComponentNames,
-          from: CodeMirror.Pos(line, hintCol),
-          to: CodeMirror.Pos(line, hintCol)
-        }));
+        if (listByRankingInProject) {
+          const hintModelNames = listByRankingInProject
+            .map((item) => (componentStore.data[item.id]
+              ? componentStore.data[item.id].name
+              : ""))
+            .filter((modelName) => modelName.trim())
+            .map((modelName) => ({
+              text: `${textPre}'#/components/schemas/${modelName}'`,
+              displayText: modelName
+            }));
+          CodeMirror.showHint(cm, () => ({
+            list: hintModelNames,
+            from: CodeMirror.Pos(line, hintCol),
+            to: CodeMirror.Pos(line, hintCol)
+          }));
+        }
+      }
+    });
+
+    this.myCodeMirror.on("change", () => {
+      const { onChange } = this.props;
+      if (onChange) {
+        onChange(this.myCodeMirror.getValue().trim());
       }
     });
   }
 
-  async parseAndSave(json) {
-    const { id, type } = this.props;
-    switch (type) {
-      case "endpoint": {
-        const url = Object.keys(json)[0];
-        const method = Object.keys(json[url])[0];
-        const {
-          summary: name,
-          description,
-          tags,
-          parameters,
-          requestBody,
-          responses
-        } = json[url][method];
-        const data = {
-          url: url || null,
-          method: method || null,
-          tag: tags && tags[0] || null,
-          name: name || "",
-          description: description || "",
-          parameters: parameters || null,
-          requestBody: requestBody || null,
-          responses: responses || null
-        };
-        endpointStore.updateById(id, data);
-        break;
-      }
-      case "component": {
-        const data = {
-          property: json
-        };
-        componentStore.updateById(id, data);
-        break;
-      }
-    }
+  parseAndSave(json) {
+    const { parseAndSave } = this.props;
+    if (parseAndSave) parseAndSave(json);
+    this.dataForSave = null;
+  }
+
+  // Called by outside update, e.g. update enpoint method directly
+  refreshContent(json) {
+    const yamlString = YAML.dump(json);
+    this.myCodeMirror.setValue(yamlString);
   }
 
   render() {
+    const { className } = this.props;
     return (
-      <div id={this.codeMirrorId} />
+      <div
+        id={this.codeMirrorId}
+        className={classnames("apiDetailCodeMirror", className)} />
     );
   }
 }

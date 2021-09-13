@@ -306,7 +306,7 @@ export const renderModelAttribute = (
     });
     extraElement = (
       <Fragment>
-        <p className="pt-1 orange">{schema.oneOf && "One Of" || "Any Of"}</p>
+        <p className="pt-1 -mb-1 orange text-sm">{schema.oneOf && "One Of" || "Any Of"}</p>
         {itemsElements}
       </Fragment>
     );

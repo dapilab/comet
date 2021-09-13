@@ -136,12 +136,12 @@ export default class Header extends Component {
             fadeRightShow: searchValue
           })}>
             <button
-              className="btn primary py-2 px-6 ml-2 mr-3 leading-none"
+              className="btn primary py-1.5 px-4 ml-2 mr-3"
               onClick={::this.goSearch}>
               Search
             </button>
             <button
-              className="btn secondary-transparent py-1 px-1"
+              className="btn secondary-transparent py-1.5 px-1"
               onClick={::this.searchReset}>
               Reset
             </button>

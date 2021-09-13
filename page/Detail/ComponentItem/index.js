@@ -60,6 +60,13 @@ export default class ComponentItem extends Component {
     });
   }
 
+  codeMirrorSave(componentId, json) {
+    const data = {
+      property: json
+    };
+    componentStore.updateById(componentId, data);
+  }
+
   render() {
     const { componentId } = this.props;
     const { isAPIExpanded } = this.state;
@@ -144,8 +151,9 @@ export default class ComponentItem extends Component {
               })}>
               <CodeMirror
                 id={component.id}
-                component={component}
-                type="component" />
+                type="component"
+                initialJSONValue={componentStore.data[component.id].property}
+                parseAndSave={this.codeMirrorSave.bind(this, component.id)} />
             </div>
           </Fragment>
 

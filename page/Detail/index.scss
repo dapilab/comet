@@ -1,7 +1,7 @@
 @import "~shared-style/variable";
 @import "~shared-style/mixin";
 
-.Detail {
+.ProjectAPIDetail {
   .attributeBorderBottom:not(:last-of-type) {
     border-bottom: 1px solid $grey-lightest;
   }

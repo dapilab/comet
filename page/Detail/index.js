@@ -46,7 +46,7 @@ export default class Detail extends Component {
     return (
       <div
         id={this.detailId}
-        className="Detail">
+        className="ProjectAPIDetail">
         <div
           id={this.detailTopBarId}
           className="h-1 -mt-1" />
